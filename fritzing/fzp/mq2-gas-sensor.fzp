@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-mq2-gas-sensor-r1" referenceFile="mq2-gas-sensor.fzp">
+<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-mq2-gas-sensor-r2" referenceFile="mq2-gas-sensor.fzp">
  <version>1</version>
  <author>MakerBuddy (https://makerbuddy.cc)</author>
- <title>MQ-2 gas and smoke sensor (MakerBuddy)</title>
+ <title>MQ-2 gas and smoke sensor with its cable (MakerBuddy)</title>
  <label>MQ</label>
  <date>2026-11-24</date>
  <url>https://github.com/MakerBuddy/MakerBuddy-IoT-Kit-Fritzing-Parts</url>
@@ -22,8 +22,9 @@
   <property name="interface">analog</property>
   <property name="connector">JST-XH 3-pin</property>
   <property name="board connector">33</property>
+  <property name="cable">kit cable with plug</property>
  </properties>
- <description>MQ-2 combustible gas and smoke sensor (Flying-Fish module) with the MakerBuddy JST adapter. 3-pin JST-XH socket: AO (printed AD), VCC, GND. Plugs into connector 33 of the MakerBuddy IoT Kit board. The can gets warm while it works. https://makerbuddy.cc</description>
+ <description>MQ-2 combustible gas and smoke sensor (Flying-Fish module) with the MakerBuddy JST adapter. 3-pin JST-XH socket: AO (printed AD), VCC, GND. Plugs into connector 33 of the MakerBuddy IoT Kit board. The can gets warm while it works. This part comes with the kit's 3-wire cable and its plug: drop the plug on connector 33 of the MakerBuddy IoT Kit board and all 3 pins connect at once. https://makerbuddy.cc</description>
  <views>
   <iconView>
    <layers image="icon/mq2-gas-sensor_icon.svg">
@@ -49,7 +50,7 @@
   </pcbView>
  </views>
  <connectors>
-  <connector id="connector0" name="AO" type="female">
+  <connector id="connector0" name="AO" type="male">
    <description>Analog output: rises with smoke and gas. On the board: connector 33 (GPIO 33).</description>
    <views>
     <breadboardView><p layer="breadboard" svgId="connector0pin"/></breadboardView>
@@ -57,7 +58,7 @@
     <pcbView><p layer="copper0" svgId="connector0pin"/><p layer="copper1" svgId="connector0pin"/></pcbView>
    </views>
   </connector>
-  <connector id="connector1" name="VCC" type="female">
+  <connector id="connector1" name="VCC" type="male">
    <description>5 V supply (the heater draws about 150 mA)</description>
    <views>
     <breadboardView><p layer="breadboard" svgId="connector1pin"/></breadboardView>
@@ -65,7 +66,7 @@
     <pcbView><p layer="copper0" svgId="connector1pin"/><p layer="copper1" svgId="connector1pin"/></pcbView>
    </views>
   </connector>
-  <connector id="connector2" name="GND" type="female">
+  <connector id="connector2" name="GND" type="male">
    <description>Ground</description>
    <views>
     <breadboardView><p layer="breadboard" svgId="connector2pin"/></breadboardView>

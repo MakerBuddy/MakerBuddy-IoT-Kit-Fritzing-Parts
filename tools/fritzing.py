@@ -175,9 +175,14 @@ class Sketch:
                               else ("connector1", runs[k - 1]["index"], "breadboardWire"))
             run["ends"][1] = ((f"connector{ib}", b["index"], "breadboard") if k == len(runs) - 1
                               else ("connector0", runs[k + 1]["index"], "breadboardWire"))
-        a["links"].setdefault(ia, []).append((runs[0]["index"], "connector0"))
-        b["links"].setdefault(ib, []).append((runs[-1]["index"], "connector1"))
+        a["links"].setdefault(ia, []).append(("connector0", runs[0]["index"], "breadboardWire"))
+        b["links"].setdefault(ib, []).append(("connector1", runs[-1]["index"], "breadboardWire"))
         self.wires += runs
+
+    def plug(self, a: dict, ia: int, b: dict, ib: int) -> None:
+        """Pin `ia` of part a sits on pin `ib` of part b: joined with no wire, as a plug in a socket."""
+        a["links"].setdefault(ia, []).append((f"connector{ib}", b["index"], "breadboard"))
+        b["links"].setdefault(ib, []).append((f"connector{ia}", a["index"], "breadboard"))
 
     def xml(self) -> str:
         out = ['<?xml version="1.0" encoding="UTF-8"?>', f'<module fritzingVersion="{FRITZING_VERSION}">',
@@ -204,7 +209,7 @@ class Sketch:
                 for i, links in sorted(item["links"].items()):
                     out += [f'      <connector connectorId="connector{i}" layer="breadboard">', '       <geometry x="0" y="0"/>',
                             "       <connects>"]
-                    out += [f'        <connect connectorId="{end}" modelIndex="{wi}" layer="breadboardWire"/>' for wi, end in links]
+                    out += [f'        <connect connectorId="{end}" modelIndex="{mi}" layer="{layer}"/>' for end, mi, layer in links]
                     out += ["       </connects>", "      </connector>"]
                 out.append("     </connectors>")
             out += ["    </breadboardView>",

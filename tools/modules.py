@@ -256,68 +256,6 @@ def flying(count, name, labels):
     return (size, silk_art), pads
 
 
-def servo() -> Part:
-    w, h = 34.3, 25.4
-    cx, cy = 17.15, 18.1
-    sx = cx + 5.35
-    plug, entries = jst_plug(7.5, 4.3, 3, [0, 1, 2], ["orange", "red", "brown"], up=False)
-    out = []
-    for k, ((ex, ey), colour) in enumerate(zip(entries, ("orange", "red", "brown"))):
-        x0 = 2.6 + k * 1.1
-        out.append(wire(f"M{n(ex)} {n(ey - 0.3)}C{n(ex)} 11 {n(x0)} 10 {n(x0)} 13.4", colour))
-    out.append(plug)
-    out.append(rect(1.0, 12.0, 32.3, 12.2, "#1f4fbf", rx=0.8, stroke="#16388a", stroke_width=0.15))
-    for hx in (3.25, 31.05):
-        out.append(circle(hx, cy, 1.1, "#ffffff") + rect(hx - 0.4, cy - 0.3, 0.8, 0.6, "#ffffff"))
-    out.append(rect(5.9, 11.6, 22.5, 13.0, "#2f6ae0", rx=1.0, stroke="#1c3f96", stroke_width=0.15))
-    out.append(circle(sx - 6.6, cy, 2.9, "#3f7bf0", stroke="#1c3f96", stroke_width=0.12)
-               + circle(sx, cy, 5.9, "#3f7bf0", stroke="#1c3f96", stroke_width=0.12))
-    arm = [(sx, cy - 3.0), (sx - 15.0, cy - 1.7), (sx - 15.0, cy + 1.7), (sx, cy + 3.0)]
-    out.append(polygon(arm, "#f6f4ee", stroke="#c2bdb1", stroke_width=0.15, stroke_linejoin="round")
-               + circle(sx - 15.0, cy, 1.7, "#f6f4ee", stroke="#c2bdb1", stroke_width=0.15)
-               + circle(sx, cy, 3.2, "#f6f4ee", stroke="#c2bdb1", stroke_width=0.15))
-    out += [circle(sx - d, cy, 0.4, "#b9b4a8") for d in (5.5, 7.5, 9.5, 11.5, 13.5)]
-    out.append(circle(sx, cy, 1.0, METAL, stroke=METAL_DARK, stroke_width=0.12)
-               + stroke(f"M{n(sx - 0.6)} {n(cy)}h1.2M{n(sx)} {n(cy - 0.6)}v1.2", METAL_DARK, 0.2))
-    pcb, pads = flying(3, "SERVO", ["S", "+", "-"])
-    pins = [Pin("PWM", "Control signal (orange wire). On the board: connector 19 (GPIO 19).", label="PWM", pcb=pads[0]),
-            Pin("VCC", "5 V supply (red wire)", pcb=pads[1]), Pin("GND", "Ground (brown wire)", pcb=pads[2])]
-    return part("sg90-servo", "SG90 micro servo with JST plug (MakerBuddy)", "M",
-                "SG90 9 g servo with its lead ending in a 3-pin JST plug. Home: connector 19.",
-                "SG90 9 g micro servo, 0 to 180 degrees, with its three-wire lead ending in a JST-XH plug: PWM "
-                "(orange), VCC (red), GND (brown). Plugs straight into connector 19 of the MakerBuddy IoT Kit board.",
-                ["SG90", "servo", "motor", "actuator"],
-                {"type": "micro servo", "model": "SG90", "interface": "PWM", "connector": "JST-XH 3-pin plug",
-                 "board connector": "19"},
-                pins, (w, h), "".join(out), pcb, ["SG90", "servo"], "sg90-servo-with-horns")
-
-
-def ds18b20() -> Part:
-    w, h = 26.0, 60.0
-    tube = "M17 34V4a3 3 0 0 1 6 0V34Z"
-    out = [path(tube, "#c9cdd2", stroke="#868c92", stroke_width=0.2), stroke("M18.6 5V32", "#f1f3f5", 0.7)]
-    cable = "M20 45V51Q20 57 13 57Q6 57 6 51V26.5"
-    plug, entries = jst_plug(6, 12, 3, [0, 1, 2], ["yellow", "red", "black"], up=False)
-    for k, ((ex, ey), colour) in enumerate(zip(entries, ("yellow", "red", "black"))):
-        x0 = 6 + (k - 1) * 1.0
-        out.append(wire(f"M{n(x0)} 28C{n(x0)} 22 {n(ex)} 22 {n(ex)} {n(ey - 0.3)}", colour))
-    out.append(stroke(cable, "#000000", 4.3, cap="butt") + stroke(cable, "#222226", 3.8, cap="butt"))
-    out.append(rect(16.4, 32, 7.2, 14, "#19191c", rx=0.8, stroke="#000000", stroke_width=0.15))
-    out.append(plug)
-    pcb, pads = flying(3, "DS18B20", ["D", "+", "-"])
-    pins = [Pin("DQ", "1-Wire data (yellow wire). On the board: connector 26, which has the 4.7 k pull-up.", pcb=pads[0]),
-            Pin("VCC", "Supply, 3.0 to 5.5 V (red wire)", pcb=pads[1]), Pin("GND", "Ground (black wire)", pcb=pads[2])]
-    return part("ds18b20-probe", "DS18B20 waterproof temperature probe with JST plug (MakerBuddy)", "T",
-                "Waterproof DS18B20 probe on a 1 m lead with a 3-pin JST plug. Home: connector 26.",
-                "DS18B20 digital temperature sensor in a waterproof stainless-steel tube on a lead ending in a JST-XH "
-                "plug: DQ (yellow), VCC (red), GND (black). Plugs into connector 26 of the MakerBuddy IoT Kit board, "
-                "the connector with the 4.7 k 1-Wire pull-up. Drawn with the lead shortened.",
-                ["DS18B20", "temperature", "probe", "1-Wire", "sensor"],
-                {"type": "temperature probe", "sensor": "DS18B20", "interface": "1-Wire", "connector": "JST-XH 3-pin plug",
-                 "board connector": "26"},
-                pins, (w, h), "".join(out), pcb, ["DS18B20", "temperature probe"], "ds18b20-waterproof-probe")
-
-
 def soil() -> Part:
     w, h = 106.2, 25.0
     out = [path("M1 12.5L13 1H99V24H13Z", "#141416", stroke="#000000", stroke_width=0.2, stroke_linejoin="round"),
@@ -464,5 +402,24 @@ def lamp() -> Part:
                 pins, (w, h), "".join(out), pcb, ["Lamp", "6 V"], "lamp-bulb-with-leads")
 
 
-def all_modules() -> list[Part]:
-    return [dht11(), ds18b20(), mq2(), soil(), hcsr04(), pir(), relay(), servo(), lcd1602(), dc_motor(), lamp()]
+# Where each module's own JST socket is in its drawing, and which way a cable leaves it.
+# hidden: the socket is on the back (HC-SR04, LCD), so the cable disappears under the module.
+SOCKETS = {
+    "dht11": {"c": (8.8, 30.6), "n": 3, "vertical": False, "exit": (0, 1)},
+    "mq2-gas-sensor": {"c": (10.5, 5.1), "n": 3, "vertical": False, "exit": (0, -1)},
+    "hc-sr501-pir": {"c": (16.55, 4.1), "n": 3, "vertical": False, "exit": (0, -1)},
+    "relay-module": {"c": (52.2, 9.74), "n": 3, "vertical": True, "exit": (1, 0)},
+    "soil-moisture-sensor": {"c": (101.6, 12.5), "n": 3, "vertical": True, "exit": (1, 0), "side": True},
+    "hc-sr04": {"c": (19.75, 19.6), "n": 4, "exit": (0, 1), "hidden": True},
+    "lcd-1602-i2c": {"c": (6.45, 13.0), "n": 4, "exit": (0, 1), "hidden": True},
+}
+
+
+def bare_modules() -> list[Part]:
+    """The seven modules that take a kit cable, drawn on their own."""
+    return [dht11(), mq2(), soil(), hcsr04(), pir(), relay(), lcd1602()]
+
+
+def loads() -> list[Part]:
+    """What the relay switches: two flying leads each."""
+    return [dc_motor(), lamp()]

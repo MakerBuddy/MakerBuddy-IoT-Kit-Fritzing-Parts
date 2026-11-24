@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-ds18b20-probe-r1" referenceFile="ds18b20-probe.fzp">
+<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-ds18b20-probe-r2" referenceFile="ds18b20-probe.fzp">
  <version>1</version>
  <author>MakerBuddy (https://makerbuddy.cc)</author>
- <title>DS18B20 waterproof temperature probe with JST plug (MakerBuddy)</title>
+ <title>DS18B20 waterproof temperature probe on its lead (MakerBuddy)</title>
  <label>T</label>
  <date>2026-11-24</date>
  <url>https://github.com/MakerBuddy/MakerBuddy-IoT-Kit-Fritzing-Parts</url>
@@ -22,8 +22,9 @@
   <property name="interface">1-Wire</property>
   <property name="connector">JST-XH 3-pin plug</property>
   <property name="board connector">26</property>
+  <property name="cable">own lead with plug</property>
  </properties>
- <description>DS18B20 digital temperature sensor in a waterproof stainless-steel tube on a lead ending in a JST-XH plug: DQ (yellow), VCC (red), GND (black). Plugs into connector 26 of the MakerBuddy IoT Kit board, the connector with the 4.7 k 1-Wire pull-up. Drawn with the lead shortened. https://makerbuddy.cc</description>
+ <description>DS18B20 digital temperature sensor in a waterproof stainless-steel tube. Its lead ends in a JST plug: DQ (yellow), VCC (red), GND (black). Drop the plug on connector 26 of the MakerBuddy IoT Kit board, the connector with the 4.7 k 1-Wire pull-up, and all three pins connect at once. Drawn with the 1 m lead shortened. https://makerbuddy.cc</description>
  <views>
   <iconView>
    <layers image="icon/ds18b20-probe_icon.svg">

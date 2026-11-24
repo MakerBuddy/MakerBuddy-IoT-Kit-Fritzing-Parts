@@ -3,31 +3,36 @@
 Drawings of the [MakerBuddy IoT Kit V1.0](https://makerbuddy.cc) board and the parts that plug
 into it, in two forms:
 
-- **Fritzing parts**: one parts bin with all 13 parts, plus each part on its own.
+- **Fritzing parts**: one parts bin with the whole kit, plus each part on its own.
 - **Plain SVG files** of the same drawings (breadboard picture, schematic symbol, PCB footprint)
   for any other tool: Inkscape, Figma, draw.io, Cirkit Designer, slides, worksheets, a website.
 
-![Every kit part wired to its home connector, as exported by Fritzing](docs/example-wiring.png)
+The kit has no loose wires: every sensor reaches the board through a cable with a plug. The parts
+work the same way. Each sensor comes **with its cable and plug**. Drop the plug on a socket of the
+board and all its pins connect at once.
 
-*The example sketch in `examples/`, opened and exported by Fritzing 1.0.2.*
+![The whole kit plugged into the board, as exported by Fritzing](docs/example-wiring.png)
+
+*The example sketch in `examples/`, opened and exported by Fritzing 1.0.2. Only the lamp is wired
+by hand, as in the real kit: its leads go to the relay's screw terminals.*
 
 ## The parts
 
-| | Part | Pins | Home on the board | File name |
+| | Part | Plug pins | Its socket on the board | File name |
 |---|---|---|---|---|
-| <img src="svg/breadboard/makerbuddy-iot-kit-v1-purple.svg" width="150" alt="Purple MakerBuddy IoT Kit V1.0 board"> | **MakerBuddy IoT Kit V1.0, purple** <br>ESP32 DevKit carrier, 76 × 72.3 mm | 81 | – | `makerbuddy-iot-kit-v1-purple` |
-| <img src="svg/breadboard/makerbuddy-iot-kit-v1-green.svg" width="150" alt="Green MakerBuddy IoT Kit V1.0 board"> | **MakerBuddy IoT Kit V1.0, green** <br>The same board in green soldermask | 81 | – | `makerbuddy-iot-kit-v1-green` |
-| <img src="svg/breadboard/dht11.svg" width="60" alt="DHT11 sensor on its JST adapter"> | **DHT11** temperature and humidity sensor | DATA, VCC, GND | connector **25** | `dht11` |
-| <img src="svg/breadboard/ds18b20-probe.svg" width="70" alt="DS18B20 waterproof probe with JST plug"> | **DS18B20** waterproof temperature probe | DQ, VCC, GND | connector **26** | `ds18b20-probe` |
-| <img src="svg/breadboard/mq2-gas-sensor.svg" width="70" alt="MQ-2 gas sensor module"> | **MQ-2** gas and smoke sensor | AO, VCC, GND | connector **33** | `mq2-gas-sensor` |
-| <img src="svg/breadboard/soil-moisture-sensor.svg" width="150" alt="Capacitive soil moisture sensor"> | **Capacitive soil moisture sensor** v2.0 | AOUT, VCC, GND | connector **32** | `soil-moisture-sensor` |
-| <img src="svg/breadboard/hc-sr04.svg" width="120" alt="HC-SR04 ultrasonic sensor"> | **HC-SR04** ultrasonic distance sensor | VCC, Trig, Echo, GND | **HC-SR04** connector | `hc-sr04` |
-| <img src="svg/breadboard/hc-sr501-pir.svg" width="90" alt="HC-SR501 PIR motion sensor"> | **HC-SR501** PIR motion sensor | OUT, VCC, GND | connector **18** | `hc-sr501-pir` |
-| <img src="svg/breadboard/relay-module.svg" width="150" alt="One-channel 5 V relay module"> | **Relay module**, 5 V, 1 channel | IN, VCC, GND, NO, COM, NC | connector **23** | `relay-module` |
-| <img src="svg/breadboard/sg90-servo.svg" width="100" alt="SG90 servo with JST plug"> | **SG90** micro servo | PWM, VCC, GND | connector **19** | `sg90-servo` |
-| <img src="svg/breadboard/lcd-1602-i2c.svg" width="150" alt="16 by 2 LCD with I2C backpack"> | **LCD 16 × 2** with I2C backpack (0x27) | VCC, GND, SCL, SDA | any **I2C** connector | `lcd-1602-i2c` |
-| <img src="svg/breadboard/dc-motor-fan.svg" width="130" alt="DC motor with yellow propeller"> | **DC motor with fan** | M+, M− | relay + **5V** connector | `dc-motor-fan` |
-| <img src="svg/breadboard/lamp.svg" width="40" alt="Small lamp in a brass holder"> | **Lamp**, 6 V, in a screw holder | L1, L2 | relay + **5V** connector | `lamp` |
+| <img src="svg/breadboard/makerbuddy-iot-kit-v1-purple.svg" width="150" alt="Purple MakerBuddy IoT Kit V1.0 board"> | **MakerBuddy IoT Kit V1.0, purple** <br>ESP32 DevKit carrier, 76 × 72.3 mm | 81 pins | – | `makerbuddy-iot-kit-v1-purple` |
+| <img src="svg/breadboard/makerbuddy-iot-kit-v1-green.svg" width="150" alt="Green MakerBuddy IoT Kit V1.0 board"> | **MakerBuddy IoT Kit V1.0, green** <br>The same board in green soldermask | 81 pins | – | `makerbuddy-iot-kit-v1-green` |
+| <img src="svg/breadboard/ds18b20-probe.svg" width="60" alt="DS18B20 waterproof probe on its lead"> | **DS18B20** waterproof temperature probe, on its own lead | DQ, VCC, GND | **26** | `ds18b20-probe` |
+| <img src="svg/breadboard/dht11.svg" width="130" alt="DHT11 sensor with its cable"> | **DHT11** temperature and humidity sensor | DATA, VCC, GND | **25** | `dht11` |
+| <img src="svg/breadboard/mq2-gas-sensor.svg" width="130" alt="MQ-2 gas sensor with its cable"> | **MQ-2** gas and smoke sensor | AO, VCC, GND | **33** | `mq2-gas-sensor` |
+| <img src="svg/breadboard/soil-moisture-sensor.svg" width="70" alt="Capacitive soil moisture sensor with its cable"> | **Capacitive soil moisture sensor** v2.0 | AOUT, VCC, GND | **32** | `soil-moisture-sensor` |
+| <img src="svg/breadboard/relay-module.svg" width="150" alt="Relay module with its cable"> | **Relay module**, 5 V, 1 channel <br>plus screw terminals NO, COM, NC | IN, VCC, GND | **23** | `relay-module` |
+| <img src="svg/breadboard/sg90-servo.svg" width="80" alt="SG90 servo on its lead"> | **SG90** micro servo, on its own lead | PWM, VCC, GND | **19** | `sg90-servo` |
+| <img src="svg/breadboard/hc-sr501-pir.svg" width="110" alt="HC-SR501 PIR motion sensor with its cable"> | **HC-SR501** PIR motion sensor | OUT, VCC, GND | **18** | `hc-sr501-pir` |
+| <img src="svg/breadboard/hc-sr04.svg" width="150" alt="HC-SR04 ultrasonic sensor with its cable"> | **HC-SR04** ultrasonic distance sensor | VCC, GND, Echo, Trig | **HC-SR04** | `hc-sr04` |
+| <img src="svg/breadboard/lcd-1602-i2c.svg" width="150" alt="16 by 2 LCD with its cable"> | **LCD 16 × 2** with I2C backpack (0x27) | VCC, GND, SCL, SDA | **I2C** (the one with a socket) | `lcd-1602-i2c` |
+| <img src="svg/breadboard/dc-motor-fan.svg" width="130" alt="DC motor with yellow propeller"> | **DC motor with fan**, two bare leads | M+, M− | relay terminals + **5V** | `dc-motor-fan` |
+| <img src="svg/breadboard/lamp.svg" width="40" alt="Small lamp in a brass holder"> | **Lamp**, 6 V, two bare leads | L1, L2 | relay terminals + **5V** | `lamp` |
 
 The purple and green boards are the same design in two soldermask colours. In Fritzing they are
 one family: place either one and switch the colour in the Inspector.
@@ -36,28 +41,44 @@ Every pin of every part is listed in [docs/PINOUT.md](docs/PINOUT.md).
 
 ## Use the parts in Fritzing
 
-All the parts at once:
+Get the parts:
 
 1. Download [`fritzing/MakerBuddy-IoT-Kit.fzbz`](fritzing/MakerBuddy-IoT-Kit.fzbz).
 2. In Fritzing choose **File > Open** and pick the file (or drag it onto the Fritzing window).
-3. A parts bin called **MakerBuddy IoT Kit** appears in the Parts window. Drag parts from it.
+3. A parts bin called **MakerBuddy IoT Kit** appears in the Parts window.
 
-One part only: open its `.fzpz` file from [`fritzing/parts/`](fritzing/parts) the same way. It
-lands in the **MINE** bin.
+Build a circuit, in the Breadboard view:
 
-To see the parts in use, open
-[`examples/MakerBuddy-IoT-Kit-wiring.fzz`](examples/MakerBuddy-IoT-Kit-wiring.fzz). It carries its
-own copy of the parts, so it opens without importing anything first.
+1. Drag the board from the bin onto the page.
+2. Drag a sensor from the bin and **drop its plug on the socket with its number**: the DHT11 on
+   `25`, the DS18B20 probe on `26`, and so on (the table above). All the plug's pins connect at
+   once. No wires to draw.
+3. Each part is drawn where it lies when it is in its own socket, so the whole kit fits around the
+   board without overlapping, as in the picture above.
 
 Good to know:
 
-- The kit's JST cables are ordinary wires in Fritzing. Draw one wire per pin. A 3-wire cable joins
-  signal, VCC and GND; pins with the same name go together.
-- The HC-SR04 is the one cable that crosses over. The board prints `VCC GND 2 15`: **Trig goes to
-  15 and Echo goes to 2**.
-- Hold the mouse over any pin to read its name and what it is for.
-- On the board, pins that are joined on the real PCB are joined in the part too (all VCC pins, all
-  GND pins, the three I2C positions, each connector and the breakout hole of the same GPIO).
+- **It does not have to be exact.** Each socket pin accepts a plug pin anywhere in its slice of
+  the socket. If the plug looks like it is in the socket, it is connected.
+- **Check it:** press and hold the mouse button on a pin of the plug. Fritzing highlights
+  everything that pin is connected to. Hold the mouse over any pin to read its name.
+- **A plug goes where you put it.** Fritzing cannot stop a DHT11 going into socket `23`. It
+  connects there too, as in real life, and the firmware will not find it. Use the number.
+- **Other sockets:** to try a part on another edge of the board, turn it first (right-click >
+  Rotate). The 3-pin plugs all have the same order: signal, VCC, GND, with GND toward the edge.
+- **Lamp and fan** have bare leads, as in the kit. Draw wires: the `5V` socket's VCC to the relay's
+  `COM`, the relay's `NO` to one lead, the other lead to the `5V` socket's GND.
+- To open one part only, open its `.fzpz` file from [`fritzing/parts/`](fritzing/parts). It lands
+  in the **MINE** bin.
+- [`examples/MakerBuddy-IoT-Kit-wiring.fzz`](examples/MakerBuddy-IoT-Kit-wiring.fzz) shows the
+  whole kit plugged in. It carries its own copy of the parts.
+
+### Modules without a cable
+
+[`fritzing/parts/module-only/`](fritzing/parts/module-only) has the seven modules on their own,
+with their JST socket as the pins, for wiring a module by hand with ordinary Fritzing wires. They
+are not in the bin, so the bin shows each sensor once. Their sockets take a plug the same way the
+board's do.
 
 ## Use the drawings in other tools
 
@@ -113,12 +134,17 @@ and `I2C3` (top).
   soil sensor (98 × 23 mm), DHT11 body and SG90 body.
 - **Modules, scaled from photographs:** the green MakerBuddy JST adapters, the relay module and the
   PIR board. Expect them to be right to about a millimetre.
+- **Cables:** drawn short and in one fixed shape per part, so the kit fits on a page. The wire
+  colours are the kit's: blue, white, red for signal, VCC, GND on the 3-wire cable, and red, white,
+  blue, yellow on the 4-wire cable. The servo and the probe have their own leads and colours.
 - **Shortened:** the DS18B20 lead (1 m on the real part) and the servo, motor and lamp leads.
+- **HC-SR04 and LCD:** their JST socket is on the back, so the cable is drawn going under them.
+  The plug's pins are in the board's order (VCC, GND, Echo, Trig and VCC, GND, SCL, SDA).
 - **Assumed:** the order of the four solder joints on the LCD's adapter tab (GND, VCC, SDA, SCL
   from the top, as on a standard PCF8574 backpack). The pin names are right either way.
-- **Footprints** show the module's outline and where its connector sits, with 2.54 mm hole
-  spacing. Flying-lead parts (servo, probe, motor, lamp) get a pin-header footprint. Nobody has
-  made a PCB from them yet: check them against your own part before ordering one.
+- **Footprints:** a part with a plug gets the footprint of the socket it plugs into (a pin
+  header, 2.54 mm spacing). The module-only parts show the module's outline and where its socket
+  sits. Nobody has made a PCB from them yet: check them against your own part before ordering one.
 - The V1.0 board is the one drawn here. It is the board in the kit and in the photographs.
 
 ## What was tested
@@ -126,33 +152,37 @@ and `I2C3` (top).
 - `tools/build.py` checks every part before it writes anything: each pin is drawn exactly once in
   the breadboard, schematic and PCB drawings, the schematic has a wire end point for every pin, the
   layer names are the ones Fritzing looks for, and no drawing uses anything Fritzing cannot read.
-- Fritzing 1.0.2 on macOS opened the example sketch with all twelve part types in it, and a second
-  sketch with the green board, and exported the breadboard, schematic and PCB views of both with no
-  errors. The picture at the top of this page is that export.
-- The parts bin `MakerBuddy-IoT-Kit.fzbz` was opened in Fritzing 1.0.2 on macOS: Fritzing unpacked
-  all 13 parts and the **MakerBuddy IoT Kit** bin appeared in the Parts window.
-- **Not tested:** opening the single `.fzpz` files one at a time (they hold the same files as the
-  bin), older Fritzing versions, Windows and Linux, and PCB fabrication from the footprints. If
-  something does not open,
-  please [open an issue](https://github.com/MakerBuddy/MakerBuddy-IoT-Kit-Fritzing-Parts/issues).
+- Fritzing 1.0.2 on macOS opened the example sketch, in which nine plugs sit in their sockets with
+  no wires and the lamp is wired through the relay, and exported the breadboard, schematic and PCB
+  views with no errors. The picture at the top of this page is that export.
+- An earlier version of the parts bin was opened in Fritzing 1.0.2 and appeared in the Parts
+  window with all its parts.
+- **Not confirmed by hand yet:** dragging a part from the bin and dropping its plug on a socket.
+  It relies on what Fritzing does for every part with pins (a part pushed into a breadboard, a
+  shield on an Arduino): pins dropped on sockets connect.
+- **Not tested:** older Fritzing versions, Windows and Linux, and PCB fabrication from the
+  footprints. If something does not work, please
+  [open an issue](https://github.com/MakerBuddy/MakerBuddy-IoT-Kit-Fritzing-Parts/issues).
 
 ## What is in this repository
 
 | Path | What |
 |---|---|
-| `fritzing/MakerBuddy-IoT-Kit.fzbz` | The parts bin: all 13 parts in one file |
+| `fritzing/MakerBuddy-IoT-Kit.fzbz` | The parts bin: the two boards and the 11 kit parts in one file |
 | `fritzing/parts/*.fzpz` | Each part on its own |
+| `fritzing/parts/module-only/*.fzpz` | The seven modules without a cable |
 | `fritzing/fzp/*.fzp` | The part definitions as readable XML (already inside the files above) |
 | `svg/breadboard/`, `svg/schematic/`, `svg/pcb/` | The drawings as plain SVG |
-| `examples/MakerBuddy-IoT-Kit-wiring.fzz` | Fritzing sketch: every part wired to its home connector |
+| `examples/MakerBuddy-IoT-Kit-wiring.fzz` | Fritzing sketch: the whole kit plugged into the board |
 | `docs/PINOUT.md` | Every pin of every part |
 | `docs/pcb/` | The footprints on a green background, for viewing |
 | `tools/` | The Python scripts that draw and package everything |
 
 ## Rebuilding
 
-Everything except this README is written by one script. Change a drawing in `tools/board.py` or
-`tools/modules.py`, then:
+Everything except this README is written by one script. `tools/board.py` draws the board,
+`tools/modules.py` the modules, and `tools/plugin.py` gives each one its cable and plug and decides
+where it lies beside the board. Change one, then:
 
 ```bash
 pip install fonttools
@@ -171,8 +201,8 @@ here. Put these three files in `tools/fonts/` first:
 
 Or point `MB_FONT_MONO`, `MB_FONT_SANS` and `MB_FONT_BOLD` at any three font files.
 
-If you change a part that people may already have installed, raise the `r1` at the end of its
-module id (`board.py`, `modules.py`). Fritzing keeps parts by that id and will not replace an
+If you change a part that people may already have installed, raise the `r2` at the end of its
+module id (`board.py`, `modules.py`, `plugin.py`). Fritzing keeps parts by that id and will not replace an
 installed part with a different one of the same id.
 
 The board's geometry is in `tools/data/board_v1.json`.

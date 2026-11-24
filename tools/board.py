@@ -293,11 +293,11 @@ def make(mask: str) -> Part:
     other = "green" if mask == "purple" else "purple"
     return Part(
         slug=f"makerbuddy-iot-kit-v1-{mask}",
-        module_id=f"makerbuddy-iot-kit-v1-0-{mask}-r1",
+        module_id=f"makerbuddy-iot-kit-v1-0-{mask}-r2",
         title=f"MakerBuddy IoT Kit V1.0 ({mask})",
         label="MB",
         family="MakerBuddy IoT Kit board",
-        summary="The kit's ESP32 carrier board, 76 × 72.3 mm, with every connector as a Fritzing pin.",
+        summary="The kit's ESP32 carrier board, 76 × 72.3 mm. Every socket takes a whole plug at once.",
         photo=f"{mask}-board-top + the V1.0 Fritzing PCB",
         description=(
             f"MakerBuddy IoT Kit V1.0 learning board, {mask} soldermask (the {other} board is the same design). "

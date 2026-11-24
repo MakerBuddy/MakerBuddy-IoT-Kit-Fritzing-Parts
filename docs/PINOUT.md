@@ -179,19 +179,9 @@ Fritzing connector (`connector<n>`), which is also the `id` of the pin in every 
 | 79 | GND rail 3 | GND row of four holes: ground | GND |
 | 80 | GND rail 4 | GND row of four holes: ground | GND |
 
-## DHT11 temperature and humidity sensor (MakerBuddy)
+## DS18B20 waterproof temperature probe on its lead (MakerBuddy)
 
-`dht11` · 3 pins
-
-| # | Pin | What it is | Net |
-|---|---|---|---|
-| 0 | DATA | Temperature and humidity data (one wire). On the board: connector 25. |  |
-| 1 | VCC | 5 V supply |  |
-| 2 | GND | Ground |  |
-
-## DS18B20 waterproof temperature probe with JST plug (MakerBuddy)
-
-`ds18b20-probe` · 3 pins
+`ds18b20-probe` · 3 pins · plugs into `26`
 
 | # | Pin | What it is | Net |
 |---|---|---|---|
@@ -199,9 +189,19 @@ Fritzing connector (`connector<n>`), which is also the `id` of the pin in every 
 | 1 | VCC | Supply, 3.0 to 5.5 V (red wire) |  |
 | 2 | GND | Ground (black wire) |  |
 
-## MQ-2 gas and smoke sensor (MakerBuddy)
+## DHT11 temperature and humidity sensor with its cable (MakerBuddy)
 
-`mq2-gas-sensor` · 3 pins
+`dht11` · 3 pins · plugs into `25`
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | DATA | Temperature and humidity data (one wire). On the board: connector 25. |  |
+| 1 | VCC | 5 V supply |  |
+| 2 | GND | Ground |  |
+
+## MQ-2 gas and smoke sensor with its cable (MakerBuddy)
+
+`mq2-gas-sensor` · 3 pins · plugs into `33`
 
 | # | Pin | What it is | Net |
 |---|---|---|---|
@@ -209,9 +209,9 @@ Fritzing connector (`connector<n>`), which is also the `id` of the pin in every 
 | 1 | VCC | 5 V supply (the heater draws about 150 mA) |  |
 | 2 | GND | Ground |  |
 
-## Capacitive soil moisture sensor v2.0 (MakerBuddy)
+## Capacitive soil moisture sensor v2.0 with its cable (MakerBuddy)
 
-`soil-moisture-sensor` · 3 pins
+`soil-moisture-sensor` · 3 pins · plugs into `32`
 
 | # | Pin | What it is | Net |
 |---|---|---|---|
@@ -219,30 +219,9 @@ Fritzing connector (`connector<n>`), which is also the `id` of the pin in every 
 | 1 | VCC | Supply, 3.3 to 5.5 V |  |
 | 2 | GND | Ground |  |
 
-## HC-SR04 ultrasonic distance sensor (MakerBuddy)
+## 5 V relay module, 1 channel with its cable (MakerBuddy)
 
-`hc-sr04` · 4 pins
-
-| # | Pin | What it is | Net |
-|---|---|---|---|
-| 0 | VCC | 5 V supply. Board HC-SR04 connector: VCC. |  |
-| 1 | Trig | Trigger input: a 10 µs pulse starts a measurement. Board HC-SR04 connector: 15. |  |
-| 2 | Echo | Echo output: high for as long as the sound travels. Board HC-SR04 connector: 2. |  |
-| 3 | GND | Ground. Board HC-SR04 connector: GND. |  |
-
-## HC-SR501 PIR motion sensor (MakerBuddy)
-
-`hc-sr501-pir` · 3 pins
-
-| # | Pin | What it is | Net |
-|---|---|---|---|
-| 0 | OUT | Digital output: high while it sees movement. On the board: connector 18 (GPIO 18). |  |
-| 1 | VCC | 5 V supply |  |
-| 2 | GND | Ground |  |
-
-## 5 V relay module, 1 channel (MakerBuddy)
-
-`relay-module` · 6 pins
+`relay-module` · 6 pins · plugs into `23`
 
 | # | Pin | What it is | Net |
 |---|---|---|---|
@@ -253,9 +232,9 @@ Fritzing connector (`connector<n>`), which is also the `id` of the pin in every 
 | 4 | COM | Common contact |  |
 | 5 | NC | Normally closed contact: joined to COM while the relay is off |  |
 
-## SG90 micro servo with JST plug (MakerBuddy)
+## SG90 micro servo on its lead (MakerBuddy)
 
-`sg90-servo` · 3 pins
+`sg90-servo` · 3 pins · plugs into `19`
 
 | # | Pin | What it is | Net |
 |---|---|---|---|
@@ -263,9 +242,30 @@ Fritzing connector (`connector<n>`), which is also the `id` of the pin in every 
 | 1 | VCC | 5 V supply (red wire) |  |
 | 2 | GND | Ground (brown wire) |  |
 
-## LCD 16x2 with I2C backpack (MakerBuddy)
+## HC-SR501 PIR motion sensor with its cable (MakerBuddy)
 
-`lcd-1602-i2c` · 4 pins
+`hc-sr501-pir` · 3 pins · plugs into `18`
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | OUT | Digital output: high while it sees movement. On the board: connector 18 (GPIO 18). |  |
+| 1 | VCC | 5 V supply |  |
+| 2 | GND | Ground |  |
+
+## HC-SR04 ultrasonic distance sensor with its cable (MakerBuddy)
+
+`hc-sr04` · 4 pins · plugs into `HC-SR04`
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | VCC | 5 V supply. Board HC-SR04 connector: VCC. |  |
+| 1 | GND | Ground. Board HC-SR04 connector: GND. |  |
+| 2 | Echo | Echo output: high for as long as the sound travels. Board HC-SR04 connector: 2. |  |
+| 3 | Trig | Trigger input: a 10 µs pulse starts a measurement. Board HC-SR04 connector: 15. |  |
+
+## LCD 16x2 with I2C backpack with its cable (MakerBuddy)
+
+`lcd-1602-i2c` · 4 pins · plugs into `I2C`
 
 | # | Pin | What it is | Net |
 |---|---|---|---|
@@ -291,3 +291,78 @@ Fritzing connector (`connector<n>`), which is also the `id` of the pin in every 
 |---|---|---|---|
 | 0 | L1 | Lamp lead, orange. To the relay's NO terminal; the relay's COM goes to the board's 5V connector. |  |
 | 1 | L2 | Lamp lead, black. To GND. |  |
+
+## DHT11 temperature and humidity sensor, module only (MakerBuddy)
+
+`dht11-module-only` · 3 pins
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | DATA | Temperature and humidity data (one wire). On the board: connector 25. |  |
+| 1 | VCC | 5 V supply |  |
+| 2 | GND | Ground |  |
+
+## MQ-2 gas and smoke sensor, module only (MakerBuddy)
+
+`mq2-gas-sensor-module-only` · 3 pins
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | AO | Analog output: rises with smoke and gas. On the board: connector 33 (GPIO 33). |  |
+| 1 | VCC | 5 V supply (the heater draws about 150 mA) |  |
+| 2 | GND | Ground |  |
+
+## Capacitive soil moisture sensor v2.0, module only (MakerBuddy)
+
+`soil-moisture-sensor-module-only` · 3 pins
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | AOUT | Analog output: falls as the soil gets wetter. On the board: connector 32 (GPIO 32). |  |
+| 1 | VCC | Supply, 3.3 to 5.5 V |  |
+| 2 | GND | Ground |  |
+
+## HC-SR04 ultrasonic distance sensor, module only (MakerBuddy)
+
+`hc-sr04-module-only` · 4 pins
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | VCC | 5 V supply. Board HC-SR04 connector: VCC. |  |
+| 1 | Trig | Trigger input: a 10 µs pulse starts a measurement. Board HC-SR04 connector: 15. |  |
+| 2 | Echo | Echo output: high for as long as the sound travels. Board HC-SR04 connector: 2. |  |
+| 3 | GND | Ground. Board HC-SR04 connector: GND. |  |
+
+## HC-SR501 PIR motion sensor, module only (MakerBuddy)
+
+`hc-sr501-pir-module-only` · 3 pins
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | OUT | Digital output: high while it sees movement. On the board: connector 18 (GPIO 18). |  |
+| 1 | VCC | 5 V supply |  |
+| 2 | GND | Ground |  |
+
+## 5 V relay module, 1 channel, module only (MakerBuddy)
+
+`relay-module-only` · 6 pins
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | IN | Coil control input, active high. On the board: connector 23 (GPIO 23). |  |
+| 1 | VCC | 5 V supply for the coil |  |
+| 2 | GND | Ground |  |
+| 3 | NO | Normally open contact: joined to COM while the relay is on |  |
+| 4 | COM | Common contact |  |
+| 5 | NC | Normally closed contact: joined to COM while the relay is off |  |
+
+## LCD 16x2 with I2C backpack, module only (MakerBuddy)
+
+`lcd-1602-i2c-module-only` · 4 pins
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | VCC | 5 V supply |  |
+| 1 | GND | Ground |  |
+| 2 | SCL | I2C clock. On the board: any I2C connector (GPIO 22). |  |
+| 3 | SDA | I2C data. On the board: any I2C connector (GPIO 21). |  |

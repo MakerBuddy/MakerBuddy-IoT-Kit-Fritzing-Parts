@@ -32,6 +32,8 @@ BLUE_PCB = "#1d4fa8"
 BLUE_PCB_EDGE = "#153b80"
 WIRE = {"red": "#d6322f", "black": "#2a2a2c", "white": "#ececea", "blue": "#2f6fd6",
         "yellow": "#f2c230", "brown": "#6b3f24", "orange": "#f0761e"}
+KIT_CABLE_3 = ["blue", "white", "red"]              # signal, VCC, GND: the kit's 3-wire cable as photographed
+KIT_CABLE_4 = ["red", "white", "blue", "yellow"]    # VCC, GND and the two signals: the kit's 4-wire cable
 WIRE_EDGE = {"red": "#8f1d1b", "black": "#000000", "white": "#a9a9a4", "blue": "#1c478f",
              "yellow": "#a8820f", "brown": "#3d2212", "orange": "#a34c0c"}
 
@@ -68,6 +70,9 @@ class Part:
     sch_title: list[str] = field(default_factory=list)
     summary: str = ""             # one line for the README
     photo: str = ""               # what the drawing was made from
+    home: str = ""                # plug-in parts: the board connector the part is drawn for
+    origin: tuple[float, float] = (0, 0)   # plug-in parts: where the board's corner is in the drawing
+    in_bin: bool = True           # listed in the parts bin
 
 
 # ---------------------------------------------------------------- drawing pieces
@@ -89,21 +94,26 @@ def solder_joint(x, y, r=0.8) -> str:
 def jst_socket(cx, cy, count, ids=None, vertical=False, key=1) -> str:
     """A white JST-XH socket seen from above (looking into it). `ids` are the connector numbers
     of its pins in drawing order: left to right, or top to bottom when vertical. key=1 puts the
-    slotted wall below (right when vertical), key=-1 on the other side."""
+    slotted wall below (right when vertical), key=-1 on the other side.
+
+    The connector of a pin is its whole slice of the socket, not the thin metal pin. Fritzing
+    joins a plug to a socket when the centre of each plug pin lies inside a socket connector, so
+    a plug dropped on roughly, or pulled up to 1.27 mm sideways by the 0.1 inch grid, still
+    connects, and to the right pins."""
     length = PITCH * (count - 1) + 4.9
     depth = 5.75
 
     def box(u, v, w, h, fill, **a):
         return crect(cx + v, cy + u, h, w, fill, **a) if vertical else crect(cx + u, cy + v, w, h, fill, **a)
 
-    out = [box(0, 0, length, depth, HOUSING, rx=0.45, stroke=HOUSING_EDGE, stroke_width=0.14),
-           box(0, -0.25 * key, length - 1.7, depth - 2.3, HOUSING_IN, rx=0.25)]
+    out = [box(0, 0, length, depth, HOUSING, rx=0.45, stroke=HOUSING_EDGE, stroke_width=0.14)]
+    if ids:             # one slice of the housing per pin, the full pitch wide: the plug's target
+        out += [box((k - (count - 1) / 2) * PITCH, 0, PITCH, depth - 0.3, HOUSING, id=cid(i)) for k, i in enumerate(ids)]
+    out.append(box(0, -0.25 * key, length - 1.7, depth - 2.3, HOUSING_IN, rx=0.25))
     for s in (-1, 1):   # the two slots of the keyed wall
         out.append(box(s * (length / 2 - 2.3), key * (depth / 2 - 0.55), 0.9, 1.1, HOUSING_IN))
     for k in range(count):
-        u = (k - (count - 1) / 2) * PITCH
-        i = ids[k] if ids else None
-        out.append(box(u, -0.25 * key, 0.74, 0.74, METAL, stroke=METAL_DARK, stroke_width=0.1, id=cid(i)))
+        out.append(box((k - (count - 1) / 2) * PITCH, -0.25 * key, 0.74, 0.74, METAL, stroke=METAL_DARK, stroke_width=0.1))
     return "".join(out)
 
 

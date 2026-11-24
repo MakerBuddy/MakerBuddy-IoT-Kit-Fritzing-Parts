@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-hc-sr501-pir-bare-r2" referenceFile="hc-sr501-pir-module-only.fzp">
+ <version>1</version>
+ <author>MakerBuddy (https://makerbuddy.cc)</author>
+ <title>HC-SR501 PIR motion sensor, module only (MakerBuddy)</title>
+ <label>PIR</label>
+ <date>2026-11-24</date>
+ <url>https://github.com/MakerBuddy/MakerBuddy-IoT-Kit-Fritzing-Parts</url>
+ <tags>
+  <tag>MakerBuddy</tag>
+  <tag>IoT Kit</tag>
+  <tag>HC-SR501</tag>
+  <tag>PIR</tag>
+  <tag>motion</tag>
+  <tag>sensor</tag>
+ </tags>
+ <properties>
+  <property name="family">MakerBuddy motion sensor</property>
+  <property name="type">motion sensor</property>
+  <property name="sensor">HC-SR501</property>
+  <property name="interface">digital</property>
+  <property name="connector">JST-XH 3-pin</property>
+  <property name="board connector">18</property>
+  <property name="cable">none</property>
+ </properties>
+ <description>HC-SR501 passive-infrared motion sensor with the MakerBuddy JST adapter. 3-pin JST-XH socket: OUT, VCC, GND. Plugs into connector 18 of the MakerBuddy IoT Kit board. https://makerbuddy.cc</description>
+ <views>
+  <iconView>
+   <layers image="icon/hc-sr501-pir-module-only_icon.svg">
+    <layer layerId="icon"/>
+   </layers>
+  </iconView>
+  <breadboardView>
+   <layers image="breadboard/hc-sr501-pir-module-only_breadboard.svg">
+    <layer layerId="breadboard"/>
+   </layers>
+  </breadboardView>
+  <schematicView>
+   <layers image="schematic/hc-sr501-pir-module-only_schematic.svg">
+    <layer layerId="schematic"/>
+   </layers>
+  </schematicView>
+  <pcbView>
+   <layers image="pcb/hc-sr501-pir-module-only_pcb.svg">
+    <layer layerId="copper0"/>
+    <layer layerId="silkscreen"/>
+    <layer layerId="copper1"/>
+   </layers>
+  </pcbView>
+ </views>
+ <connectors>
+  <connector id="connector0" name="OUT" type="female">
+   <description>Digital output: high while it sees movement. On the board: connector 18 (GPIO 18).</description>
+   <views>
+    <breadboardView><p layer="breadboard" svgId="connector0pin"/></breadboardView>
+    <schematicView><p layer="schematic" svgId="connector0pin" terminalId="connector0terminal"/></schematicView>
+    <pcbView><p layer="copper0" svgId="connector0pin"/><p layer="copper1" svgId="connector0pin"/></pcbView>
+   </views>
+  </connector>
+  <connector id="connector1" name="VCC" type="female">
+   <description>5 V supply</description>
+   <views>
+    <breadboardView><p layer="breadboard" svgId="connector1pin"/></breadboardView>
+    <schematicView><p layer="schematic" svgId="connector1pin" terminalId="connector1terminal"/></schematicView>
+    <pcbView><p layer="copper0" svgId="connector1pin"/><p layer="copper1" svgId="connector1pin"/></pcbView>
+   </views>
+  </connector>
+  <connector id="connector2" name="GND" type="female">
+   <description>Ground</description>
+   <views>
+    <breadboardView><p layer="breadboard" svgId="connector2pin"/></breadboardView>
+    <schematicView><p layer="schematic" svgId="connector2pin" terminalId="connector2terminal"/></schematicView>
+    <pcbView><p layer="copper0" svgId="connector2pin"/><p layer="copper1" svgId="connector2pin"/></pcbView>
+   </views>
+  </connector>
+ </connectors>
+ <buses>
+ </buses>
+</module>
