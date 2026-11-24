@@ -50,7 +50,6 @@ class Pin:
     gap: bool = False             # leave an empty slot before this pin in the schematic
     pcb: tuple[float, float] | None = None   # pad centre in the footprint
     pad: tuple[float, float] = (0.74, 0.5)   # pad ring: centre-line radius, ring width
-    leg: bool = False             # the pin is the free end of a bendable lead (Fritzing "leg")
 
 
 @dataclass
@@ -146,17 +145,6 @@ def bare_end(x, y, i, vertical=True, length=2.6) -> str:
     if vertical:
         return crect(x, y + length / 2, 0.7, length, METAL_LIGHT, stroke=METAL_DARK, stroke_width=0.1, id=cid(i))
     return crect(x + length / 2, y, length, 0.7, METAL_LIGHT, stroke=METAL_DARK, stroke_width=0.1, id=cid(i))
-
-
-LEG_COLOUR = {**WIRE, "white": "#cfd0cb"}   # a lead is one plain line, so white needs to show on white
-
-
-def leg(i: int, root, end, colour, width=0.9) -> str:
-    """A bendable lead: Fritzing lets its free end be dragged onto a pin, and keeps it there
-    while the part is moved with Alt held. `root` is where it leaves the part, `end` its free end."""
-    return (crect(root[0], root[1], 1.0, 1.0, LEG_COLOUR[colour], id=cid(i))
-            + el("line", id=f"connector{i}leg", x1=root[0], y1=root[1], x2=end[0], y2=end[1], fill="none",
-                 stroke=LEG_COLOUR[colour], stroke_width=width, stroke_linecap="round"))
 
 
 def pcb_plate(x, y, w, h, fill, edge, rx=0.6) -> str:

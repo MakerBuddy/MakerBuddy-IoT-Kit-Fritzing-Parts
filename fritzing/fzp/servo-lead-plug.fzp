@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-servo-lead-plug-r1" referenceFile="servo-lead-plug.fzp">
+ <version>1</version>
+ <author>MakerBuddy (https://makerbuddy.cc)</author>
+ <title>Servo lead plug (MakerBuddy)</title>
+ <label>P</label>
+ <date>2026-11-24</date>
+ <url>https://github.com/MakerBuddy/MakerBuddy-IoT-Kit-Fritzing-Parts</url>
+ <tags>
+  <tag>MakerBuddy</tag>
+  <tag>IoT Kit</tag>
+  <tag>JST-XH</tag>
+  <tag>plug</tag>
+  <tag>cable</tag>
+ </tags>
+ <properties>
+  <property name="family">MakerBuddy cable plug</property>
+  <property name="type">cable plug</property>
+  <property name="pins">3</property>
+  <property name="wires">orange, red, brown</property>
+ </properties>
+ <description>JST-XH cable plug with 3 pins (PWM, VCC, GND) and a short stub of each wire. Drop it on a socket of the MakerBuddy IoT Kit board and every pin connects at once. Draw Fritzing wires from the stubs to the part at the other end of the cable; they follow the plug when it is dragged. The plug on the SG90's own lead. Home: connector 19. https://makerbuddy.cc</description>
+ <views>
+  <iconView>
+   <layers image="icon/servo-lead-plug_icon.svg">
+    <layer layerId="icon"/>
+   </layers>
+  </iconView>
+  <breadboardView>
+   <layers image="breadboard/servo-lead-plug_breadboard.svg">
+    <layer layerId="breadboard"/>
+   </layers>
+  </breadboardView>
+  <schematicView>
+   <layers image="schematic/servo-lead-plug_schematic.svg">
+    <layer layerId="schematic"/>
+   </layers>
+  </schematicView>
+  <pcbView>
+   <layers image="pcb/servo-lead-plug_pcb.svg">
+    <layer layerId="copper0"/>
+    <layer layerId="silkscreen"/>
+    <layer layerId="copper1"/>
+   </layers>
+  </pcbView>
+ </views>
+ <connectors>
+  <connector id="connector0" name="PWM" type="male">
+   <description>Plug pin: control signal. Goes into the socket.</description>
+   <views>
+    <breadboardView><p layer="breadboard" svgId="connector0pin"/></breadboardView>
+    <schematicView><p layer="schematic" svgId="connector0pin" terminalId="connector0terminal"/></schematicView>
+    <pcbView><p layer="copper0" svgId="connector0pin"/><p layer="copper1" svgId="connector0pin"/></pcbView>
+   </views>
+  </connector>
+  <connector id="connector1" name="VCC" type="male">
+   <description>Plug pin: 5 V. Goes into the socket.</description>
+   <views>
+    <breadboardView><p layer="breadboard" svgId="connector1pin"/></breadboardView>
+    <schematicView><p layer="schematic" svgId="connector1pin" terminalId="connector1terminal"/></schematicView>
+    <pcbView><p layer="copper0" svgId="connector1pin"/><p layer="copper1" svgId="connector1pin"/></pcbView>
+   </views>
+  </connector>
+  <connector id="connector2" name="GND" type="male">
+   <description>Plug pin: ground. Goes into the socket.</description>
+   <views>
+    <breadboardView><p layer="breadboard" svgId="connector2pin"/></breadboardView>
+    <schematicView><p layer="schematic" svgId="connector2pin" terminalId="connector2terminal"/></schematicView>
+    <pcbView><p layer="copper0" svgId="connector2pin"/><p layer="copper1" svgId="connector2pin"/></pcbView>
+   </views>
+  </connector>
+  <connector id="connector3" name="PWM wire" type="male">
+   <description>The orange wire of this pin. Start a Fritzing wire here.</description>
+   <views>
+    <breadboardView><p layer="breadboard" svgId="connector3pin"/></breadboardView>
+    <schematicView><p layer="schematic" svgId="connector3pin" terminalId="connector3terminal"/></schematicView>
+    <pcbView><p layer="copper0" svgId="connector3pin"/><p layer="copper1" svgId="connector3pin"/></pcbView>
+   </views>
+  </connector>
+  <connector id="connector4" name="VCC wire" type="male">
+   <description>The red wire of this pin. Start a Fritzing wire here.</description>
+   <views>
+    <breadboardView><p layer="breadboard" svgId="connector4pin"/></breadboardView>
+    <schematicView><p layer="schematic" svgId="connector4pin" terminalId="connector4terminal"/></schematicView>
+    <pcbView><p layer="copper0" svgId="connector4pin"/><p layer="copper1" svgId="connector4pin"/></pcbView>
+   </views>
+  </connector>
+  <connector id="connector5" name="GND wire" type="male">
+   <description>The brown wire of this pin. Start a Fritzing wire here.</description>
+   <views>
+    <breadboardView><p layer="breadboard" svgId="connector5pin"/></breadboardView>
+    <schematicView><p layer="schematic" svgId="connector5pin" terminalId="connector5terminal"/></schematicView>
+    <pcbView><p layer="copper0" svgId="connector5pin"/><p layer="copper1" svgId="connector5pin"/></pcbView>
+   </views>
+  </connector>
+ </connectors>
+ <buses>
+  <bus id="wire0">
+   <nodeMember connectorId="connector0"/>
+   <nodeMember connectorId="connector3"/>
+  </bus>
+  <bus id="wire1">
+   <nodeMember connectorId="connector1"/>
+   <nodeMember connectorId="connector4"/>
+  </bus>
+  <bus id="wire2">
+   <nodeMember connectorId="connector2"/>
+   <nodeMember connectorId="connector5"/>
+  </bus>
+ </buses>
+</module>

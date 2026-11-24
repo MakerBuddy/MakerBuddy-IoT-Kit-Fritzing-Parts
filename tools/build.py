@@ -19,7 +19,7 @@ import board  # noqa: E402
 import modules  # noqa: E402
 import plugin  # noqa: E402
 from common import Part, breadboard_svg, pcb_svg, schematic_svg  # noqa: E402
-from fritzing import PX, Sketch, bin_file, bundle_files, connector_centres, fzp, write_zip  # noqa: E402
+from fritzing import PX, WIRE_COLOURS, Sketch, bin_file, bundle_files, connector_centres, fzp, write_zip  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 BIN_TITLE = "MakerBuddy IoT Kit"
@@ -56,8 +56,6 @@ def check(part: Part, svgs: dict[str, str]) -> list[str]:
         for i in range(len(part.pins)):
             if f"connector{i}pin" not in ids:
                 problems.append(f"{view}: connector{i}pin missing")
-            if view == "breadboard" and part.pins[i].leg and f"connector{i}leg" not in ids:
-                problems.append(f"{view}: connector{i}leg missing")
             if view == "schematic" and f"connector{i}terminal" not in ids:
                 problems.append(f"{view}: connector{i}terminal missing")
         w, h = float(root.get("width")[:-2]), float(root.get("height")[:-2])
@@ -67,40 +65,52 @@ def check(part: Part, svgs: dict[str, str]) -> list[str]:
     return problems
 
 
-def example(parts: dict[str, Part], svgs: dict[str, dict[str, str]]) -> Sketch:
-    """The whole kit on the purple board: every cable in its home socket, and the lamp on the
-    relay. One wire is drawn: 5 V to the relay's COM terminal."""
+PLUG_FOR = {"sg90-servo-flex": "servo-lead-plug", "ds18b20-probe-flex": "probe-lead-plug"}
+PARKED = 14.0     # millimetres a waiting plug lies in front of its socket
+
+
+def kit_sketch(parts: dict[str, Part], svgs: dict[str, dict[str, str]], plugged: bool) -> Sketch:
+    """The whole kit around the purple board, every sensor cabled to its own plug with Fritzing
+    wires. plugged=False leaves each plug lying in front of its socket, to be dragged in;
+    plugged=True puts every plug in its socket."""
     sk = Sketch()
-    grid = iter([(c * 420.0, r * 360.0) for r in range(4) for c in range(4)])
+    grid = iter([(c * 300.0, r * 300.0) for r in range(6) for c in range(5)])
     ox, oy = 480.0, 300.0                         # the board's corner on the breadboard page
     mm = lambda x, y: (ox + x * PX, oy + y * PX)  # board millimetres to page units
 
-    def put(slug, title, x, y):
+    def put(slug, title, x, y, turn=0):
         at = next(grid)
-        return sk.place(parts[slug], svgs[slug], title, mm(x, y), at, at)
+        return sk.place(parts[slug], svgs[slug], title, mm(x, y), at, at, turn)
 
     b = put("makerbuddy-iot-kit-v1-purple", "MakerBuddy1", -board.M, -board.M)
-    placed = {}
-    for part in parts.values():
-        if not part.home or not part.in_bin:
-            continue
-        item = placed[part.slug] = put(part.slug, part.label + "1", -part.origin[0], -part.origin[1])
-        for k in range(len(board.CONN[part.home]["pins"])):       # lead k ends on socket pin k
-            sk.plug(item, k, b, board.WHERE[(part.home, k)])
-    # the load: the lamp's orange lead sits in the relay's NO terminal, its black lead goes to GND,
-    # and the 5V connector feeds COM
-    relay = placed["relay-module"]
-    no = sk.point(relay, sk.pin(relay, "NO"))
-    lamp_part = parts["lamp"]
-    lead = connector_centres(svgs["lamp"]["breadboard"])["connector0end"]
-    lamp = sk.place(lamp_part, svgs["lamp"], "Lamp1", (no[0] - lead[0] * PX, no[1] - lead[1] * PX), next(grid), (0, 0))
-    sk.plug(lamp, 0, relay, sk.pin(relay, "NO"))
-    put("dc-motor-fan", "Fan1", -112, 118)
-    l2, com = sk.point(lamp, 1), sk.point(relay, sk.pin(relay, "COM"))
+    items = {}
+    for part in [p for p in parts.values() if p.home and p.slug.endswith("-flex")]:
+        item = items[part.slug] = put(part.slug, part.label + "1", -part.origin[0], -part.origin[1])
+        pins, d0 = plugin.home(part.home)
+        count = len(pins)
+        plug = parts[PLUG_FOR.get(part.slug, "cable-plug-3-wire" if count == 3 else "cable-plug-4-wire")]
+        turn = 90 if d0 == plugin.DOWN else 0     # the 3-wire plug is drawn for the right-hand row
+        shift = 0.0 if plugged else PARKED
+        first = connector_centres(svgs[plug.slug]["breadboard"])["connector0pin"]
+        fx, fy = Sketch.turned_point(plug, *first, turn)
+        p = put(plug.slug, f"Plug {board.CONN[part.home]['label']}", pins[0][0] + d0[0] * shift - fx, pins[0][1] + d0[1] * shift - fy,
+                turn)
+        colours = plug.props["wires"].split(", ")
+        for k in range(count):
+            if plugged:
+                sk.plug(p, k, b, board.WHERE[(part.home, k)])
+            WIRE_COLOURS[colours[k]] = {"white": "#f4f4f1", "black": "#404040"}.get(colours[k], plugin.WIRE[colours[k]])
+            sk.wire(item, part.pins[k].name, p, plug.pins[count + k].name, colours[k])
+    # the load, with plain wires as in the kit: 5 V to COM, the lamp between NO and GND
+    relay = items["relay-module-flex"]
+    lamp = put("lamp", "Lamp1", -76, 47)
+    put("dc-motor-fan", "Fan1", -118, 118)
+    l2, com = sk.point(lamp, sk.pin(lamp, "L2")), sk.point(relay, sk.pin(relay, "COM"))
+    sk.wire(lamp, "L1", relay, "NO", "load")
     sk.wire(b, "5V GND", lamp, "L2", "gnd",
-            via=[mm(63.2, 9.4), mm(63.2, -52), mm(-106.5, -52), (mm(-106.5, 0)[0], l2[1])])
+            via=[mm(63.2, 9.4), mm(63.2, -52), mm(-120, -52), (mm(-120, 0)[0], l2[1])])
     sk.wire(b, "5V VCC", relay, "COM", "load",
-            via=[mm(64.5, 10.4), mm(64.5, -53.6), mm(-108, -53.6), (mm(-108, 0)[0], com[1])])
+            via=[mm(64.5, 10.4), mm(64.5, -53.6), mm(-121.6, -53.6), (mm(-121.6, 0)[0], com[1])])
     return sk
 
 
@@ -118,14 +128,15 @@ def pinout_md(parts: list[Part]) -> str:
 
 
 def main() -> int:
-    flex, fixed, bare = plugin.kit()
-    parts = [board.make("purple"), board.make("green")] + flex + modules.loads() + fixed + bare
+    fixed, flex = plugin.kit()
+    parts = [board.make("purple"), board.make("green")] + fixed + modules.loads() + flex
     by_slug = {p.slug: p for p in parts}
-    for sub in ("svg/breadboard", "svg/schematic", "svg/pcb", "fritzing/parts/module-only", "fritzing/parts/fixed-cable",
-                "fritzing/fzp", "examples", "docs/pcb"):
+    for sub in ("svg/breadboard", "svg/schematic", "svg/pcb", "fritzing/parts/flexible-cable", "fritzing/fzp",
+                "examples", "docs/pcb"):
         (ROOT / sub).mkdir(parents=True, exist_ok=True)
     all_svgs: dict[str, dict[str, str]] = {}
     everything: dict[str, str] = {}
+    kit_files: dict[str, str] = {}
     failed = False
     for part in parts:
         svgs = all_svgs[part.slug] = views(part)
@@ -143,12 +154,16 @@ def main() -> int:
         write_zip(folder / f"{part.slug}.fzpz", files)
         if part.in_bin:
             everything.update(files)
+        if part.in_bin or part.folder == "flexible-cable" or part.slug.startswith("makerbuddy"):
+            kit_files.update(files)
     if failed:
         return 1
     in_bin = [p for p in parts if p.in_bin]
     write_zip(ROOT / "fritzing" / f"{BIN_NAME}.fzbz", {**everything, f"{BIN_NAME}.fzb": bin_file(BIN_TITLE, in_bin)})
-    sketch = example(by_slug, all_svgs)
-    write_zip(ROOT / "examples" / f"{BIN_NAME}-wiring.fzz", {**everything, f"{BIN_NAME}-wiring.fz": sketch.xml()})
+    starter = kit_sketch(by_slug, all_svgs, plugged=False)
+    write_zip(ROOT / "examples" / f"{BIN_NAME}-starter.fzz", {**kit_files, f"{BIN_NAME}-starter.fz": starter.xml()})
+    sketch = kit_sketch(by_slug, all_svgs, plugged=True)
+    write_zip(ROOT / "examples" / f"{BIN_NAME}-wiring.fzz", {**kit_files, f"{BIN_NAME}-wiring.fz": sketch.xml()})
     (ROOT / "docs" / "PINOUT.md").write_text(pinout_md(parts))
     print(f"{len(parts)} parts, {sum(len(p.pins) for p in parts)} pins, {len(sketch.wires)} wire runs in the example sketch")
     return 0

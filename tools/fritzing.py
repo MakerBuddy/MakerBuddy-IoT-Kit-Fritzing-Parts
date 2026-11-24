@@ -45,8 +45,7 @@ def fzp(part: Part) -> str:
         out += [f'  <connector id="connector{i}" name={quoteattr(pin.name)} type="{pin.kind}">',
                 f"   <description>{escape(pin.desc)}</description>",
                 "   <views>",
-                f'    <breadboardView><p layer="breadboard" svgId="connector{i}pin"'
-                + (f' legId="connector{i}leg"' if pin.leg else "") + "/></breadboardView>",
+                f'    <breadboardView><p layer="breadboard" svgId="connector{i}pin"/></breadboardView>',
                 f'    <schematicView><p layer="schematic" svgId="connector{i}pin" terminalId="connector{i}terminal"/></schematicView>',
                 f'    <pcbView><p layer="copper0" svgId="connector{i}pin"/><p layer="copper1" svgId="connector{i}pin"/></pcbView>',
                 "   </views>",
@@ -118,8 +117,6 @@ def connector_centres(svg: str) -> dict[str, tuple[float, float]]:
                 found[ident] = (dx + a("cx"), dy + a("cy"))
             elif tag == "line":
                 found[ident] = (dx + (a("x1") + a("x2")) / 2, dy + (a("y1") + a("y2")) / 2)
-                if ident.endswith("leg"):          # a wire meets a lead at its free end
-                    found[ident[:-3] + "end"] = (dx + a("x2"), dy + a("y2"))
             else:
                 found[ident] = (dx, dy)
         for child in node:
@@ -147,10 +144,21 @@ class Sketch:
         self.index += 1
         return self.index
 
-    def place(self, part: Part, svgs: dict[str, str], title: str, bb, sch, pcb, turned: bool = False) -> dict:
-        """`turned` puts the part in the breadboard view rotated by 180 degrees."""
+    @staticmethod
+    def turned_point(part: Part, cx: float, cy: float, turn: int) -> tuple[float, float]:
+        """A point of a part's drawing (millimetres) after Fritzing turns the part clockwise about
+        its centre by `turn` degrees: 0, 90 or 180. The part's corner stays where it was."""
+        w, h = part.bb_size
+        if turn == 90:
+            return (w + h) / 2 - cy, (h - w) / 2 + cx
+        if turn == 180:
+            return w - cx, h - cy
+        return cx, cy
+
+    def place(self, part: Part, svgs: dict[str, str], title: str, bb, sch, pcb, turn: int = 0) -> dict:
+        """`turn` puts the part in the breadboard view turned clockwise by 0, 90 or 180 degrees."""
         item = {"part": part, "title": title, "bb": bb, "sch": sch, "pcb": pcb, "index": self._next(),
-                "centres": connector_centres(svgs["breadboard"]), "links": {}, "turned": turned}
+                "centres": connector_centres(svgs["breadboard"]), "links": {}, "turn": turn}
         self.items.append(item)
         return item
 
@@ -161,10 +169,7 @@ class Sketch:
         raise KeyError(f"{item['part'].slug} has no pin {name}")
 
     def point(self, item: dict, i: int) -> tuple[float, float]:
-        cx, cy = item["centres"].get(f"connector{i}end") or item["centres"][f"connector{i}pin"]
-        if item["turned"]:
-            w, h = item["part"].bb_size
-            cx, cy = w - cx, h - cy
+        cx, cy = self.turned_point(item["part"], *item["centres"][f"connector{i}pin"], item["turn"])
         return item["bb"][0] + cx * PX, item["bb"][1] + cy * PX
 
     def wire(self, a: dict, a_pin: str, b: dict, b_pin: str, colour: str, via=()) -> None:
@@ -200,10 +205,12 @@ class Sketch:
                     f"   <title>{escape(item['title'])}</title>", "   <views>",
                     '    <breadboardView layer="breadboard">']
             geometry = f'<geometry z="{2.5 + z * 0.001:.4f}" x="{item["bb"][0]:.3f}" y="{item["bb"][1]:.3f}"'
-            if item["turned"]:
-                w, h = part.bb_size
+            if item["turn"]:
+                w, h = part.bb_size[0] * PX, part.bb_size[1] * PX
+                m = ((0, 1, -1, 0, (w + h) / 2, (h - w) / 2) if item["turn"] == 90 else (-1, 0, 0, -1, w, h))
                 out += [f"     {geometry}>",
-                        f'      <transform m11="-1" m12="0" m13="0" m21="0" m22="-1" m23="0" m31="{w * PX:.3f}" m32="{h * PX:.3f}" m33="1"/>',
+                        f'      <transform m11="{m[0]}" m12="{m[1]}" m13="0" m21="{m[2]}" m22="{m[3]}" m23="0" '
+                        f'm31="{m[4]:.3f}" m32="{m[5]:.3f}" m33="1"/>',
                         "     </geometry>"]
             else:
                 out.append(f"     {geometry}/>")

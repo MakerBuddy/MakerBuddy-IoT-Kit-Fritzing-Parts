@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import math
 
-from common import (leg, BLUE_PCB, BLUE_PCB_EDGE, BOLD, GREEN_PCB, GREEN_PCB_EDGE, HOUSING, HOUSING_EDGE, HOUSING_IN,
+from common import (BLUE_PCB, BLUE_PCB_EDGE, BOLD, GREEN_PCB, GREEN_PCB_EDGE, HOUSING, HOUSING_EDGE, HOUSING_IN,
                     METAL, METAL_DARK, METAL_LIGHT, MONO, PAD, PITCH, SILK, Part, Pin, bare_end, cid, jst_plug,
                     jst_socket, mesh, mount_hole, pcb_plate, silk, silk_outline, silk_text, solder_joint, wire)
 from svgkit import circle, crect, el, ellipse, g, line, n, path, polygon, rect, stroke
@@ -339,7 +339,7 @@ def lcd1602() -> Part:
 
 
 def dc_motor() -> Part:
-    w, h = 62.0, 46.2
+    w, h = 62.0, 46.0
     fx, fy = 20.5, 21.0
     out = []
     for k in range(4):
@@ -353,14 +353,16 @@ def dc_motor() -> Part:
     out.append(rect(mx, 8.4, 15.2, 23.6, "#c5c9ce", rx=1.2, stroke="#7f858b", stroke_width=0.2))
     out.append(rect(mx + 1.2, 9.4, 2.2, 21.6, "#e4e7ea") + rect(mx + 11.6, 9.4, 1.4, 21.6, "#a9aeb4"))
     out.append(rect(mx + 1.0, 31.0, 13.2, 2.4, "#f3f1ea", rx=0.4, stroke="#b9b4a8", stroke_width=0.12))
-    for i, x, colour, bend in ((1, mx + 2.4, "black", -2.2), (0, mx + 12.8, "red", 2.2)):
+    ends = [(mx + 2.4, "black"), (mx + 12.8, "red")]
+    for i, (x, colour) in zip((1, 0), ends):
         out.append(rect(x - 0.5, 33.2, 1.0, 1.8, "#d1b25a"))
-        out.append(leg(i, (x, 35.0), (x + bend, 44.0), colour, 1.1))
+        bend = 2.2 if colour == "red" else -2.2
+        out.append(wire(f"M{n(x)} 34.6C{n(x)} 38 {n(x + bend)} 38 {n(x + bend)} 41.6", colour, 1.1))
+        out.append(bare_end(x + bend, 41.4, i))
     pcb, pads = flying(2, "MOTOR", ["+", "-"])
     pins = [Pin("M+", "Motor lead, red. To the relay's NO terminal; the relay's COM goes to the board's 5V connector.",
-                pcb=pads[0], leg=True),
-            Pin("M-", "Motor lead, black. To GND, for example the GND pin of the board's 5V connector.", pcb=pads[1],
-                leg=True)]
+                pcb=pads[0]),
+            Pin("M-", "Motor lead, black. To GND.", pcb=pads[1])]
     return part("dc-motor-fan", "DC motor with fan (MakerBuddy)", "M",
                 "Small 130-size DC motor with a four-blade propeller and two leads. Switched by the relay.",
                 "Small brushed DC motor (130 size) with the kit's yellow four-blade propeller and two flying leads. "
@@ -383,12 +385,12 @@ def lamp() -> Part:
     out.append(rect(2.4, 23.7, 11.2, 1.5, "#a8742f", rx=0.3))
     for i, x, colour, bend in ((1, 6.6, "black", -1.6), (0, 9.4, "orange", 1.6)):
         out.append(rect(x - 0.8, 25.2, 1.6, 3.0, "#caa24c", stroke="#8f6f24", stroke_width=0.12))
-        out.append(leg(i, (x, 28.0), (x + bend, 41.6), colour, 1.1))
+        out.append(wire(f"M{n(x)} 27.6C{n(x)} 33 {n(x + bend)} 33 {n(x + bend)} 39.2", colour, 1.1))
+        out.append(bare_end(x + bend, 39.0, i))
     pcb, pads = flying(2, "LAMP", ["1", "2"])
     pins = [Pin("L1", "Lamp lead, orange. To the relay's NO terminal; the relay's COM goes to the board's 5V connector.",
-                pcb=pads[0], leg=True),
-            Pin("L2", "Lamp lead, black. To GND, for example the GND pin of the board's 5V connector.", pcb=pads[1],
-                leg=True)]
+                pcb=pads[0]),
+            Pin("L2", "Lamp lead, black. To GND.", pcb=pads[1])]
     return part("lamp", "6 V lamp in a holder with leads (MakerBuddy)", "L",
                 "Small filament lamp in a brass screw holder with two leads. Switched by the relay.",
                 "Small 6 V filament lamp in a brass E10 screw holder with two flying leads. It is switched by the "
@@ -419,6 +421,5 @@ def bare_modules() -> list[Part]:
 
 
 def loads() -> list[Part]:
-    """What the relay switches. Each has two leads that bend and stretch."""
-    import dataclasses
-    return [dataclasses.replace(p, module_id=p.module_id.replace("-r1", "-r3")) for p in (dc_motor(), lamp())]
+    """What the relay switches: two flying leads each."""
+    return [dc_motor(), lamp()]
