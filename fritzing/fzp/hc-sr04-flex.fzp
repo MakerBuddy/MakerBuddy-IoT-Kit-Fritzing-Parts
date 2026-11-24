@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-hc-sr04-flex-r1" referenceFile="hc-sr04-flex.fzp">
+<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-hc-sr04-flex-r2" referenceFile="hc-sr04-flex.fzp">
  <version>1</version>
  <author>MakerBuddy (https://makerbuddy.cc)</author>
  <title>HC-SR04 ultrasonic distance sensor, for a flexible cable (MakerBuddy)</title>
@@ -23,7 +23,7 @@
   <property name="board connector">HC-SR04</property>
   <property name="cable">flexible (wires to a plug part)</property>
  </properties>
- <description>HC-SR04 ultrasonic distance sensor, 2 cm to 4 m. Pins left to right: Vcc, Trig, Echo, Gnd. On the MakerBuddy IoT Kit board it uses the HC-SR04 connector, printed VCC GND 2 15: Trig goes to 15 and Echo to 2, so the two middle wires cross. The kit part carries a 4-pin JST adapter on its back. This version is for a flexible cable: its pins are the 4 wire ends of the cable in its socket. Draw Fritzing wires from them to a MakerBuddy cable plug, then drag the plug onto the board. https://makerbuddy.cc</description>
+ <description>HC-SR04 ultrasonic distance sensor, 2 cm to 4 m. Pins left to right: Vcc, Trig, Echo, Gnd. On the MakerBuddy IoT Kit board it uses the HC-SR04 connector, printed VCC GND 2 15: Trig goes to 15 and Echo to 2. The kit part carries a green adapter with a 4-pin JST socket on its back; the adapter is drawn below the board so the socket and the cable's plug can be seen. This version is for a flexible cable: the cable's plug sits in its socket and its pins are the ends of the 4 wire stubs that leave the plug. Draw Fritzing wires from them to a MakerBuddy cable plug, then drag the plug onto the board. https://makerbuddy.cc</description>
  <views>
   <iconView>
    <layers image="icon/hc-sr04-flex_icon.svg">

@@ -181,8 +181,11 @@ def relay() -> Part:
 # ---------------------------------------------------------------- HC-SR04
 
 def hcsr04() -> Part:
-    w, h = 47.0, 22.9
-    out = [rect(16.5, 20.6, 6.5, 1.3, GREEN_PCB, stroke=GREEN_PCB_EDGE, stroke_width=0.12),
+    w, h = 47.0, 30.2
+    # The kit part carries a green JST adapter on its back; only its edge shows below the real
+    # board. It is drawn pulled out below the board so that its 4-pin socket can be seen.
+    jx, jy = SOCKETS["hc-sr04"]["c"]
+    out = [pcb_plate(jx - 7.2, 19.4, 14.4, 9.8, GREEN_PCB, GREEN_PCB_EDGE), jst_socket(jx, jy, 4),
            pcb_plate(1, 1, 45, 20, BLUE_PCB, BLUE_PCB_EDGE)]
     out += [mount_hole(x, y, 0.85) for x, y in ((2.3, 2.4), (44.6, 2.4), (44.7, 19.6))]
     for cx in (10.1, 36.6):
@@ -197,7 +200,7 @@ def hcsr04() -> Part:
         out.append(crect(x, 19.4, 0.9, 0.9, METAL, stroke=METAL_DARK, stroke_width=0.1, id=cid(i)))
         out.append(silk(name, x, 17.6, 1.2, 270, anchor="l"))
     out.append(silk("T", 4.6, 18.9, 2.6) + silk("R", 42.4, 18.9, 2.6))
-    size, silk_art = footprint(w, h, "HC-SR04", (23.5, 8.0), 2.0, boxes=[(23.5, 19.4, 10.6, 2.6)])
+    size, silk_art = footprint(w, h, "HC-SR04", (23.5, 8.0), 2.0, boxes=[(23.5, 19.4, 10.6, 2.6), (jx, jy, 12.5, 5.75)])
     pins = [Pin("VCC", "5 V supply. Board HC-SR04 connector: VCC.", pcb=fp(xs[0], 19.4)),
             Pin("Trig", "Trigger input: a 10 µs pulse starts a measurement. Board HC-SR04 connector: 15.", pcb=fp(xs[1], 19.4)),
             Pin("Echo", "Echo output: high for as long as the sound travels. Board HC-SR04 connector: 2.", pcb=fp(xs[2], 19.4)),
@@ -206,7 +209,8 @@ def hcsr04() -> Part:
                 "HC-SR04 distance sensor, 45 × 20 mm. Home: the HC-SR04 connector (Trig 15, Echo 2).",
                 "HC-SR04 ultrasonic distance sensor, 2 cm to 4 m. Pins left to right: Vcc, Trig, Echo, Gnd. On the "
                 "MakerBuddy IoT Kit board it uses the HC-SR04 connector, printed VCC GND 2 15: Trig goes to 15 and "
-                "Echo to 2, so the two middle wires cross. The kit part carries a 4-pin JST adapter on its back.",
+                "Echo to 2. The kit part carries a green adapter with a 4-pin JST socket on its back; the "
+                "adapter is drawn below the board so the socket and the cable's plug can be seen.",
                 ["HC-SR04", "ultrasonic", "distance", "sensor"],
                 {"type": "distance sensor", "sensor": "HC-SR04", "interface": "trigger + echo", "connector": "4 pins, 2.54 mm",
                  "board connector": "HC-SR04"},
@@ -300,10 +304,11 @@ def lcd1602() -> Part:
     w, h = 92.4, 38.0
     px, py = 11.4, 1.0
     out = [rect(1.0, 1.9, 10.9, 15.1, "#176b3a", rx=0.4, stroke=GREEN_PCB_EDGE, stroke_width=0.15)]
-    ys = [5.44 + k * 2.54 for k in range(4)]
-    for i, yy in zip((1, 0, 3, 2), ys):     # GND, VCC, SDA, SCL from the top, as on a PCF8574 backpack
-        out.append(circle(5.06, yy, 0.85, METAL, stroke=METAL_DARK, stroke_width=0.1, id=cid(i))
-                   + circle(4.9, yy - 0.15, 0.35, METAL_LIGHT))
+    # The adapter tab's 4-pin socket is soldered on from the back (the photograph shows its four
+    # joints). It is drawn on the front so that the socket and the cable's plug can be seen.
+    jx, jy = SOCKETS["lcd-1602-i2c"]["c"]
+    ys = [jy + (k - 1.5) * PITCH for k in range(4)]
+    out.append(jst_socket(jx, jy, 4, vertical=True, key=-1))
     out.append(pcb_plate(px, py, 80, 36, GREEN_PCB, GREEN_PCB_EDGE))
     for hx in (2.5, 77.5):
         for hy in (2.5, 33.5):
@@ -321,8 +326,8 @@ def lcd1602() -> Part:
     for r in range(2):
         for c in range(16):
             out.append(rect(x0 + c * 3.55, y0 + r * 5.95, 2.95, 5.55, "#2c3fc0"))
-    size, silk_art = footprint(w, h, "LCD 16x2 I2C", (px + 40, py + 19), 2.6, boxes=[(5.06, 9.25, 2.8, 10.4)])
-    pads = {i: fp(5.06, yy) for i, yy in zip((1, 0, 3, 2), ys)}
+    size, silk_art = footprint(w, h, "LCD 16x2 I2C", (px + 40, py + 19), 2.6, boxes=[(jx, jy, 5.75, 12.5)])
+    pads = {i: fp(jx, yy) for i, yy in zip((0, 1, 2, 3), ys)}
     pins = [Pin("VCC", "5 V supply", pcb=pads[0], kind="female"), Pin("GND", "Ground", pcb=pads[1], kind="female"),
             Pin("SCL", "I2C clock. On the board: any I2C connector (GPIO 22).", pcb=pads[2], kind="female"),
             Pin("SDA", "I2C data. On the board: any I2C connector (GPIO 21).", pcb=pads[3], kind="female")]
@@ -330,8 +335,8 @@ def lcd1602() -> Part:
                 "16 × 2 character LCD, 80 × 36 mm, with a PCF8574 I2C backpack at address 0x27. Home: any I2C connector.",
                 "16 x 2 character LCD (HD44780) with a PCF8574 I2C backpack at address 0x27 and the MakerBuddy JST "
                 "adapter on its left edge. Four wires: VCC, GND, SCL, SDA. Plugs into any of the three I2C positions "
-                "of the MakerBuddy IoT Kit board. The order of the four joints on the adapter tab is taken from the "
-                "standard backpack (GND, VCC, SDA, SCL from the top); the names are what matter in Fritzing.",
+                "of the MakerBuddy IoT Kit board. The adapter's 4-pin socket is on the back of the real part; it "
+                "is drawn on the front so the socket and the cable's plug can be seen.",
                 ["LCD", "1602", "16x2", "I2C", "PCF8574", "HD44780", "display"],
                 {"type": "character LCD", "characters": "16 x 2", "interface": "I2C (PCF8574, 0x27)",
                  "connector": "JST-XH 4-pin", "board connector": "I2C"},
@@ -402,16 +407,17 @@ def lamp() -> Part:
                 pins, (w, h), "".join(out), pcb, ["Lamp", "6 V"], "lamp-bulb-with-leads")
 
 
-# Where each module's own JST socket is in its drawing, and which way a cable leaves it.
-# hidden: the socket is on the back (HC-SR04, LCD), so the cable disappears under the module.
+# Where each module's own JST socket is in its drawing, and which way the cable leaves the plug
+# that sits in it. inline: the wires leave along the row of pins (as on the board's own sockets)
+# instead of across it. side: a socket that takes its plug from the side (soil sensor).
 SOCKETS = {
     "dht11": {"c": (8.8, 30.6), "n": 3, "vertical": False, "exit": (0, 1)},
     "mq2-gas-sensor": {"c": (10.5, 5.1), "n": 3, "vertical": False, "exit": (0, -1)},
     "hc-sr501-pir": {"c": (16.55, 4.1), "n": 3, "vertical": False, "exit": (0, -1)},
     "relay-module": {"c": (52.2, 9.74), "n": 3, "vertical": True, "exit": (1, 0)},
     "soil-moisture-sensor": {"c": (101.6, 12.5), "n": 3, "vertical": True, "exit": (1, 0), "side": True},
-    "hc-sr04": {"c": (19.75, 19.6), "n": 4, "exit": (0, 1), "hidden": True},
-    "lcd-1602-i2c": {"c": (6.45, 13.0), "n": 4, "exit": (0, 1), "hidden": True},
+    "hc-sr04": {"c": (21.4, 25.1), "n": 4, "vertical": False, "exit": (0, 1)},
+    "lcd-1602-i2c": {"c": (5.3, 9.45), "n": 4, "vertical": True, "exit": (0, 1), "inline": True},
 }
 
 

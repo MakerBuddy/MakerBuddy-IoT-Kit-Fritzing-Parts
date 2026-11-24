@@ -50,6 +50,7 @@ class Pin:
     gap: bool = False             # leave an empty slot before this pin in the schematic
     pcb: tuple[float, float] | None = None   # pad centre in the footprint
     pad: tuple[float, float] = (0.74, 0.5)   # pad ring: centre-line radius, ring width
+    hybrid: bool = False          # breadboard view: the pin takes no mouse press (see fritzing.fzp)
 
 
 @dataclass

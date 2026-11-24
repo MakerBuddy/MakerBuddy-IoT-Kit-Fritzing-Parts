@@ -42,10 +42,14 @@ def fzp(part: Part) -> str:
         out += ["   </layers>", f"  </{view}View>"]
     out += [" </views>", " <connectors>"]
     for i, pin in enumerate(part.pins):
+        # hybrid="yes": Fritzing gives such a connector no mouse buttons and no hover (ConnectorItem::
+        # setHiddenOrInactive), so a press on it reaches the part and moves it instead of starting a
+        # wire. It still connects when it is dropped on a socket and still carries its net.
+        hybrid = ' hybrid="yes"' if pin.hybrid else ""
         out += [f'  <connector id="connector{i}" name={quoteattr(pin.name)} type="{pin.kind}">',
                 f"   <description>{escape(pin.desc)}</description>",
                 "   <views>",
-                f'    <breadboardView><p layer="breadboard" svgId="connector{i}pin"/></breadboardView>',
+                f'    <breadboardView><p layer="breadboard" svgId="connector{i}pin"{hybrid}/></breadboardView>',
                 f'    <schematicView><p layer="schematic" svgId="connector{i}pin" terminalId="connector{i}terminal"/></schematicView>',
                 f'    <pcbView><p layer="copper0" svgId="connector{i}pin"/><p layer="copper1" svgId="connector{i}pin"/></pcbView>',
                 "   </views>",
@@ -98,10 +102,12 @@ def bin_file(title: str, parts: list[Part]) -> str:
 _TRANSLATE = re.compile(r"translate\(\s*(-?[\d.]+)[ ,]+(-?[\d.]+)\s*\)")
 
 
-def connector_centres(svg: str) -> dict[str, tuple[float, float]]:
-    """Centre of every element with an id, following translate() on its groups."""
+def connector_boxes(svg: str) -> dict[str, tuple[float, float, float, float]]:
+    """Box (x, y, width, height) of every element with an id, following translate() on its groups.
+    Fritzing takes this box as the connector: a press inside it starts a wire, and a plug pin
+    whose centre is dropped inside it connects."""
     root = ET.fromstring(svg.encode())
-    found: dict[str, tuple[float, float]] = {}
+    found: dict[str, tuple[float, float, float, float]] = {}
 
     def walk(node, dx, dy):
         m = _TRANSLATE.search(node.get("transform", ""))
@@ -112,18 +118,24 @@ def connector_centres(svg: str) -> dict[str, tuple[float, float]]:
         if ident:
             a = lambda k: float(node.get(k, 0))
             if tag == "rect":
-                found[ident] = (dx + a("x") + a("width") / 2, dy + a("y") + a("height") / 2)
+                found[ident] = (dx + a("x"), dy + a("y"), a("width"), a("height"))
             elif tag == "circle":
-                found[ident] = (dx + a("cx"), dy + a("cy"))
+                found[ident] = (dx + a("cx") - a("r"), dy + a("cy") - a("r"), 2 * a("r"), 2 * a("r"))
             elif tag == "line":
-                found[ident] = (dx + (a("x1") + a("x2")) / 2, dy + (a("y1") + a("y2")) / 2)
+                x1, x2, y1, y2 = sorted((a("x1"), a("x2"))) + sorted((a("y1"), a("y2")))
+                found[ident] = (dx + x1, dy + y1, x2 - x1, y2 - y1)
             else:
-                found[ident] = (dx, dy)
+                found[ident] = (dx, dy, 0.0, 0.0)
         for child in node:
             walk(child, dx, dy)
 
     walk(root, 0.0, 0.0)
     return found
+
+
+def connector_centres(svg: str) -> dict[str, tuple[float, float]]:
+    """Centre of every element with an id."""
+    return {k: (x + w / 2, y + h / 2) for k, (x, y, w, h) in connector_boxes(svg).items()}
 
 
 # ---------------------------------------------------------------- sketch

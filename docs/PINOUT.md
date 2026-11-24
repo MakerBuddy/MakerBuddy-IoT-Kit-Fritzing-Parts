@@ -301,9 +301,9 @@ Fritzing connector (`connector<n>`), which is also the `id` of the pin in every 
 | 0 | SIG | Plug pin: signal. Goes into the socket. | wire0 |
 | 1 | VCC | Plug pin: 5 V. Goes into the socket. | wire1 |
 | 2 | GND | Plug pin: ground. Goes into the socket. | wire2 |
-| 3 | SIG wire | The blue wire of this pin. Start a Fritzing wire here. | wire0 |
-| 4 | VCC wire | The white wire of this pin. Start a Fritzing wire here. | wire1 |
-| 5 | GND wire | The red wire of this pin. Start a Fritzing wire here. | wire2 |
+| 3 | SIG wire | The blue wire of this pin. A Fritzing wire to the sensor starts here. | wire0 |
+| 4 | VCC wire | The white wire of this pin. A Fritzing wire to the sensor starts here. | wire1 |
+| 5 | GND wire | The red wire of this pin. A Fritzing wire to the sensor starts here. | wire2 |
 
 ## Kit cable plug, 4 wires (MakerBuddy)
 
@@ -315,10 +315,10 @@ Fritzing connector (`connector<n>`), which is also the `id` of the pin in every 
 | 1 | GND | Plug pin: ground. Goes into the socket. | wire1 |
 | 2 | S1 | Plug pin: first signal: SCL on I2C, 2 on HC-SR04. Goes into the socket. | wire2 |
 | 3 | S2 | Plug pin: second signal: SDA on I2C, 15 on HC-SR04. Goes into the socket. | wire3 |
-| 4 | VCC wire | The red wire of this pin. Start a Fritzing wire here. | wire0 |
-| 5 | GND wire | The white wire of this pin. Start a Fritzing wire here. | wire1 |
-| 6 | S1 wire | The blue wire of this pin. Start a Fritzing wire here. | wire2 |
-| 7 | S2 wire | The yellow wire of this pin. Start a Fritzing wire here. | wire3 |
+| 4 | VCC wire | The red wire of this pin. A Fritzing wire to the sensor starts here. | wire0 |
+| 5 | GND wire | The white wire of this pin. A Fritzing wire to the sensor starts here. | wire1 |
+| 6 | S1 wire | The blue wire of this pin. A Fritzing wire to the sensor starts here. | wire2 |
+| 7 | S2 wire | The yellow wire of this pin. A Fritzing wire to the sensor starts here. | wire3 |
 
 ## Servo lead plug (MakerBuddy)
 
@@ -329,9 +329,9 @@ Fritzing connector (`connector<n>`), which is also the `id` of the pin in every 
 | 0 | PWM | Plug pin: control signal. Goes into the socket. | wire0 |
 | 1 | VCC | Plug pin: 5 V. Goes into the socket. | wire1 |
 | 2 | GND | Plug pin: ground. Goes into the socket. | wire2 |
-| 3 | PWM wire | The orange wire of this pin. Start a Fritzing wire here. | wire0 |
-| 4 | VCC wire | The red wire of this pin. Start a Fritzing wire here. | wire1 |
-| 5 | GND wire | The brown wire of this pin. Start a Fritzing wire here. | wire2 |
+| 3 | PWM wire | The orange wire of this pin. A Fritzing wire to the sensor starts here. | wire0 |
+| 4 | VCC wire | The red wire of this pin. A Fritzing wire to the sensor starts here. | wire1 |
+| 5 | GND wire | The brown wire of this pin. A Fritzing wire to the sensor starts here. | wire2 |
 
 ## DS18B20 probe lead plug (MakerBuddy)
 
@@ -342,9 +342,9 @@ Fritzing connector (`connector<n>`), which is also the `id` of the pin in every 
 | 0 | DQ | Plug pin: 1-Wire data. Goes into the socket. | wire0 |
 | 1 | VCC | Plug pin: supply. Goes into the socket. | wire1 |
 | 2 | GND | Plug pin: ground. Goes into the socket. | wire2 |
-| 3 | DQ wire | The yellow wire of this pin. Start a Fritzing wire here. | wire0 |
-| 4 | VCC wire | The red wire of this pin. Start a Fritzing wire here. | wire1 |
-| 5 | GND wire | The black wire of this pin. Start a Fritzing wire here. | wire2 |
+| 3 | DQ wire | The yellow wire of this pin. A Fritzing wire to the sensor starts here. | wire0 |
+| 4 | VCC wire | The red wire of this pin. A Fritzing wire to the sensor starts here. | wire1 |
+| 5 | GND wire | The black wire of this pin. A Fritzing wire to the sensor starts here. | wire2 |
 
 ## DS18B20 waterproof temperature probe, for a flexible lead (MakerBuddy)
 

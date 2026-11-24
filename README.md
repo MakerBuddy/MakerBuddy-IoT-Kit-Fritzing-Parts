@@ -26,7 +26,8 @@ real kit: its leads go to the relay's screw terminals and the `5V` socket.*
 Open [`examples/MakerBuddy-IoT-Kit-starter.fzz`](examples/MakerBuddy-IoT-Kit-starter.fzz). The
 board is in the middle and every sensor is already cabled to its own plug.
 
-- **Drag a plug onto its socket.** All its pins connect at once and the cable follows the plug.
+- **Drag a plug onto its socket.** Press anywhere on the plug: it moves as one piece. All its
+  pins connect at once and the cable follows the plug.
 - **Drag a sensor anywhere.** Its cable stretches and stays plugged in.
 - **Pull a plug out** by dragging it off the socket.
 - Delete the sensors you do not need, then **File > Save As** to keep the starter clean.
@@ -48,8 +49,9 @@ In both:
 
 - **It does not have to be exact.** Each socket pin accepts a plug pin anywhere in its slice of
   the socket. If the plug looks like it is in the socket, it is connected.
-- **Check it:** press and hold the mouse button on a pin of the plug. Fritzing highlights
-  everything that pin is connected to. Hold the mouse over any pin to read its name.
+- **Check it:** press and hold the mouse button on the bare hole of that GPIO beside the DevKit.
+  Fritzing highlights everything the pin is connected to, as far as the sensor. Hold the mouse
+  over a pin of the board to read its name.
 - **A plug goes where you put it.** Fritzing cannot stop a DHT11 going into socket `23`. It
   connects there too, as in real life, and the firmware will not find it. Use the number.
 - **Other sockets:** the 3-wire plug is drawn for the sockets on the right. For the bottom row,
@@ -58,9 +60,33 @@ In both:
 - **Lamp and fan** have bare leads, as in the kit. Draw wires: the `5V` socket's VCC to the relay's
   `COM`, the relay's `NO` to one lead, the other lead to the `5V` socket's GND.
 
+## Selecting a plug
+
+A plug is one thing. **Press anywhere on a plug and the whole plug moves**; it never gives you a
+single wire.
+
+Fritzing decides this by what is under the mouse. A press inside a pin starts a new wire; a press
+anywhere else on a part moves the part. So in these parts the pins of a plug are switched off for
+the mouse (`hybrid="yes"` in the part file): Fritzing still connects them when the plug is dropped
+on a socket, but a press on them goes to the plug. A plug in its socket also covers the socket's
+pins, so a press there moves the plug too.
+
+What Fritzing still does, and no part can change:
+
+- **A wire is a wire.** The cable in the starter sketch is made of Fritzing wires. Press on the
+  end of a wire and you pull that one wire off; press on the middle of a wire and you bend it.
+  To move a plug, press on its white body, not on the wires behind it. **Edit > Undo** puts a
+  pulled wire back.
+- **The board's empty sockets still start a wire** when pressed. That is on purpose: the lamp and
+  the fan are wired from the `5V` socket, and you may want to wire parts of your own.
+- **The small ends of the wire stubs** (on a plug and on a sensor) are where the cable's wires
+  hold on. Each is a spot 0.6 mm wide, hidden under the wire that is attached to it.
+- The plug's pins no longer show their name when the mouse is over them. The board's pins do.
+
 ## The parts
 
-In the bin (one rigid piece each):
+In the bin (one rigid piece each). Every sensor is drawn with the cable's plug in its own socket
+and the cable running to the plug for the board:
 
 | | Part | Plug pins | Its socket on the board | File name |
 |---|---|---|---|---|
@@ -73,8 +99,8 @@ In the bin (one rigid piece each):
 | <img src="svg/breadboard/relay-module.svg" width="150" alt="Relay module with its cable"> | **Relay module**, 5 V, 1 channel <br>plus screw terminals NO, COM, NC | IN, VCC, GND | **23** | `relay-module` |
 | <img src="svg/breadboard/sg90-servo.svg" width="80" alt="SG90 servo on its lead"> | **SG90** micro servo, on its own lead | PWM, VCC, GND | **19** | `sg90-servo` |
 | <img src="svg/breadboard/hc-sr501-pir.svg" width="110" alt="HC-SR501 PIR motion sensor with its cable"> | **HC-SR501** PIR motion sensor | OUT, VCC, GND | **18** | `hc-sr501-pir` |
-| <img src="svg/breadboard/hc-sr04.svg" width="150" alt="HC-SR04 ultrasonic sensor with its cable"> | **HC-SR04** ultrasonic distance sensor | VCC, GND, Echo, Trig | **HC-SR04** | `hc-sr04` |
-| <img src="svg/breadboard/lcd-1602-i2c.svg" width="150" alt="16 by 2 LCD with its cable"> | **LCD 16 × 2** with I2C backpack (0x27) | VCC, GND, SCL, SDA | **I2C** (the one with a socket) | `lcd-1602-i2c` |
+| <img src="svg/breadboard/hc-sr04.svg" width="150" alt="HC-SR04 ultrasonic sensor with its 4-pin connector and cable"> | **HC-SR04** ultrasonic distance sensor <br>with its 4-pin connector | VCC, GND, Echo, Trig | **HC-SR04** | `hc-sr04` |
+| <img src="svg/breadboard/lcd-1602-i2c.svg" width="150" alt="16 by 2 LCD with its 4-pin connector and cable"> | **LCD 16 × 2** with I2C backpack (0x27) <br>with its 4-pin connector | VCC, GND, SCL, SDA | **I2C** (the one with a socket) | `lcd-1602-i2c` |
 | <img src="svg/breadboard/dc-motor-fan.svg" width="130" alt="DC motor with yellow propeller"> | **DC motor with fan**, two bare leads | M+, M− | relay terminals + **5V** | `dc-motor-fan` |
 | <img src="svg/breadboard/lamp.svg" width="40" alt="Small lamp in a brass holder"> | **Lamp**, 6 V, two bare leads | L1, L2 | relay terminals + **5V** | `lamp` |
 
@@ -86,10 +112,11 @@ In the starter sketch and in [`fritzing/parts/flexible-cable/`](fritzing/parts/f
 | <img src="svg/breadboard/cable-plug-3-wire.svg" width="70" alt="3-wire cable plug"> | **Kit cable plug, 3 wires**: three pins for a socket and a stub of each wire | `cable-plug-3-wire` |
 | <img src="svg/breadboard/cable-plug-4-wire.svg" width="90" alt="4-wire cable plug"> | **Kit cable plug, 4 wires** | `cable-plug-4-wire` |
 | <img src="svg/breadboard/servo-lead-plug.svg" width="70" alt="Servo lead plug"> | **Servo lead plug** and **probe lead plug**, in their own wire colours | `servo-lead-plug`, `probe-lead-plug` |
-| <img src="svg/breadboard/dht11-flex.svg" width="50" alt="DHT11 with the cable's plug in its socket"> | **The nine sensors without a drawn cable**: the cable's plug sits in the sensor's socket and the wire ends are its pins | `dht11-flex`, `mq2-gas-sensor-flex`, … |
+| <img src="svg/breadboard/dht11-flex.svg" width="50" alt="DHT11 with the cable's plug in its socket and a stub of each wire"> | **The nine sensors without a drawn cable**: the cable's plug sits in the sensor's socket, a short stub of each wire leaves it, and the stub ends are its pins | `dht11-flex`, `mq2-gas-sensor-flex`, … |
 
 To build a flexible cable yourself: place a `-flex` sensor and a plug, and draw one Fritzing wire
-from each wire end of the sensor to the stub of the same colour on the plug.
+from the end of each wire stub of the sensor to the stub of the same colour on the plug. The stub
+ends are small: zoom in, and start the wire in the middle of the end.
 
 The purple and green boards are the same design in two soldermask colours. In Fritzing they are
 one family: place either one and switch the colour in the Inspector.
@@ -154,10 +181,15 @@ and `I2C3` (top).
   cable, and red, white, blue, yellow on the 4-wire cable. The servo and the probe have their own
   leads and colours. In the bin parts the cable is drawn short and in one fixed shape.
 - **Shortened:** the DS18B20 lead (1 m on the real part) and the servo, motor and lamp leads.
-- **HC-SR04 and LCD:** their JST socket is on the back, so the cable is drawn coming out from
-  under them. Its wires are in the board's order (VCC, GND, Echo, Trig and VCC, GND, SCL, SDA).
-- **Assumed:** the order of the four solder joints on the LCD's adapter tab (GND, VCC, SDA, SCL
-  from the top, as on a standard PCF8574 backpack). The pin names are right either way.
+- **The cable's plug on each sensor:** every sensor is drawn with the cable's white housing in
+  its socket and the wires leaving it. The order of the wire colours at the sensor end is the one
+  that lets the cable lie flat without crossing; it is not a record of which colour meets which
+  pin of the sensor. The pin names in Fritzing are right either way.
+- **HC-SR04 and LCD, drawn so the connector can be seen:** on the real parts the 4-pin JST socket
+  is on the back. The HC-SR04's green adapter is drawn pulled out below the board (on the real
+  part only its edge shows), and the LCD's socket is drawn on the front of its adapter tab (the
+  photograph shows the four solder joints of the socket there). Their wires are in the board's
+  order: VCC, GND, Echo, Trig and VCC, GND, SCL, SDA.
 - **Footprints:** every sensor and plug gets the footprint of the socket it plugs into (a pin
   header, 2.54 mm spacing); the relay adds three pads for its terminals. Nobody has made a PCB
   from them yet: check them against your own part before ordering one.
@@ -168,11 +200,28 @@ and `I2C3` (top).
 - `tools/build.py` checks every part before it writes anything: each pin is drawn exactly once in
   the breadboard, schematic and PCB drawings, the schematic has a wire end point for every pin, the
   layer names are the ones Fritzing looks for, and no drawing uses anything Fritzing cannot read.
-- Fritzing 1.0.2 on macOS opened both sketches and exported their breadboard, schematic and PCB
-  views with no errors. The two pictures at the top of this page are those exports.
-- Tried by hand in Fritzing 1.0.2 on macOS: the parts bin opens and shows in the Parts window;
-  dropping a bin sensor's plug on its socket connects it; and in the starter sketch, dragging a
-  plug onto its socket connects it with the cable following.
+- `tools/build.py` also checks the plugs: every pin that goes into a socket is switched off for
+  the mouse, no wire end on a plug-in part is wider than 0.8 mm, and in the two sketches the
+  centre of every plug pin lies inside its own socket pin and no other (waiting plugs: inside
+  none), every seated plug covers its socket, and the plugs lie on top of everything else.
+- Checked with Fritzing 1.0.2 on macOS, run without its window:
+  - both sketches open and export their breadboard, schematic and PCB views with no errors. The
+    two pictures at the top of this page are those exports;
+  - Fritzing loaded both sketches and saved them again, and the saved files were read back: in
+    the wiring sketch all 29 plug pins are still joined to the right socket pins (DHT11 DATA to
+    `25`, HC-SR04 Echo to `2` and Trig to `15`, LCD SCL and SDA to `I2C`, and so on) and all 29
+    cable wires still run from each sensor to its plug. The switched-off pins keep their
+    connections;
+  - the same for a sketch with all nine bin sensors plugged in.
+- Read in Fritzing's source code (`ConnectorItem::mousePressEvent`, `setHiddenOrInactive`,
+  `PaletteItemBase::findConnectorsUnder`), not seen on screen: a switched-off pin takes no mouse
+  press, and a dropped part still looks for a socket under the centre of each such pin.
+- Tried by hand in Fritzing 1.0.2 on macOS, with the earlier version of these parts: the parts bin
+  opens and shows in the Parts window; dropping a bin sensor's plug on its socket connects it; and
+  in the starter sketch, dragging a plug onto its socket connects it with the cable following.
+- **Still to be tried by hand with this version:** that a press anywhere on a plug moves the whole
+  plug (middle, pin end, a 4-wire plug, a turned plug of the bottom row), and that dropping it on
+  a socket still connects every pin. The mouse cannot be tested without the window.
 - **Tried and dropped:** cables made of Fritzing's "bendable legs". The loose wire ends could not
   be plugged in by hand and the plug was no longer drawn.
 - **Not tested:** older Fritzing versions, Windows and Linux, and PCB fabrication from the
@@ -218,8 +267,9 @@ here. Put these three files in `tools/fonts/` first:
 Or point `MB_FONT_MONO`, `MB_FONT_SANS` and `MB_FONT_BOLD` at any three font files.
 
 If you change a part that people may already have installed, raise the number at the end of its
-module id (`board.py`, `modules.py`, `plugin.py`). Fritzing keeps parts by that id and will not replace an
-installed part with a different one of the same id.
+module id (`board.py` for the boards; `REV`, `FLEX_REV` and `PLUG_REV` at the top of `plugin.py`
+for the rest). Fritzing keeps parts by that id and will not replace an installed part with a
+different one of the same id.
 
 The board's geometry is in `tools/data/board_v1.json`.
 

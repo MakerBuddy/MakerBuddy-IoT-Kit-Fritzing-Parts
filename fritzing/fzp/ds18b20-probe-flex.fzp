@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-ds18b20-probe-flex-r1" referenceFile="ds18b20-probe-flex.fzp">
+<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-ds18b20-probe-flex-r2" referenceFile="ds18b20-probe-flex.fzp">
  <version>1</version>
  <author>MakerBuddy (https://makerbuddy.cc)</author>
  <title>DS18B20 waterproof temperature probe, for a flexible lead (MakerBuddy)</title>

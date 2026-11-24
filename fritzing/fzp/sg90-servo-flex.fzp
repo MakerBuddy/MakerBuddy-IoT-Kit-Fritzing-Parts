@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-sg90-servo-flex-r1" referenceFile="sg90-servo-flex.fzp">
+<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-sg90-servo-flex-r2" referenceFile="sg90-servo-flex.fzp">
  <version>1</version>
  <author>MakerBuddy (https://makerbuddy.cc)</author>
  <title>SG90 micro servo, for a flexible lead (MakerBuddy)</title>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-dht11-flex-r1" referenceFile="dht11-flex.fzp">
+<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-dht11-flex-r2" referenceFile="dht11-flex.fzp">
  <version>1</version>
  <author>MakerBuddy (https://makerbuddy.cc)</author>
  <title>DHT11 temperature and humidity sensor, for a flexible cable (MakerBuddy)</title>
@@ -23,7 +23,7 @@
   <property name="board connector">25</property>
   <property name="cable">flexible (wires to a plug part)</property>
  </properties>
- <description>DHT11 temperature and humidity sensor on the MakerBuddy JST adapter board. 3-pin JST-XH socket: DATA, VCC, GND. Plugs into connector 25 of the MakerBuddy IoT Kit board with a 3-wire kit cable. This version is for a flexible cable: its pins are the 3 wire ends of the cable in its socket. Draw Fritzing wires from them to a MakerBuddy cable plug, then drag the plug onto the board. https://makerbuddy.cc</description>
+ <description>DHT11 temperature and humidity sensor on the MakerBuddy JST adapter board. 3-pin JST-XH socket: DATA, VCC, GND. Plugs into connector 25 of the MakerBuddy IoT Kit board with a 3-wire kit cable. This version is for a flexible cable: the cable's plug sits in its socket and its pins are the ends of the 3 wire stubs that leave the plug. Draw Fritzing wires from them to a MakerBuddy cable plug, then drag the plug onto the board. https://makerbuddy.cc</description>
  <views>
   <iconView>
    <layers image="icon/dht11-flex_icon.svg">

@@ -19,7 +19,8 @@ import board  # noqa: E402
 import modules  # noqa: E402
 import plugin  # noqa: E402
 from common import Part, breadboard_svg, pcb_svg, schematic_svg  # noqa: E402
-from fritzing import PX, WIRE_COLOURS, Sketch, bin_file, bundle_files, connector_centres, fzp, write_zip  # noqa: E402
+from fritzing import (PX, WIRE_COLOURS, Sketch, bin_file, bundle_files, connector_boxes, connector_centres, fzp,  # noqa: E402
+                      write_zip)
 
 ROOT = Path(__file__).resolve().parent.parent
 BIN_TITLE = "MakerBuddy IoT Kit"
@@ -62,6 +63,31 @@ def check(part: Part, svgs: dict[str, str]) -> list[str]:
         for ident, (x, y) in connector_centres(svg).items():
             if ident.startswith("connector") and not (0 <= x <= w and 0 <= y <= h):
                 problems.append(f"{view}: {ident} is outside the drawing")
+    problems += solid(part, svgs["breadboard"])
+    return problems
+
+
+MAX_HIT = 0.8     # millimetres: the largest spot on a plug-in part that may start a wire when pressed
+
+
+def solid(part: Part, breadboard: str) -> list[str]:
+    """A part with a plug must move as one piece. Fritzing starts a wire when the mouse is pressed
+    inside a connector's box and moves the part when it is pressed anywhere else on it. So on these
+    parts a pin that goes into a socket takes no mouse at all (hybrid), and a wire end is a small
+    spot. Screw terminals (female) are meant to be wired by hand and stay as they are."""
+    if not (part.home or part.folder == "flexible-cable"):
+        return []
+    problems = []
+    boxes = connector_boxes(breadboard)
+    plug_pins = (range(len(part.pins) // 2) if part.label == "P" else
+                 [i for i, pin in enumerate(part.pins) if pin.kind == "male"] if part.in_bin else [])
+    for i in plug_pins:
+        if not part.pins[i].hybrid:
+            problems.append(f"breadboard: plug pin {part.pins[i].name} would start a wire when pressed (not hybrid)")
+    for i, pin in enumerate(part.pins):
+        _x, _y, w, h = boxes.get(f"connector{i}pin", (0, 0, 0, 0))
+        if pin.kind == "male" and not pin.hybrid and max(w, h) > MAX_HIT:
+            problems.append(f"breadboard: {pin.name} is a {w:.2f} x {h:.2f} mm wire target, more than {MAX_HIT}")
     return problems
 
 
@@ -83,9 +109,15 @@ def kit_sketch(parts: dict[str, Part], svgs: dict[str, dict[str, str]], plugged:
         return sk.place(parts[slug], svgs[slug], title, mm(x, y), at, at, turn)
 
     b = put("makerbuddy-iot-kit-v1-purple", "MakerBuddy1", -board.M, -board.M)
-    items = {}
-    for part in [p for p in parts.values() if p.home and p.slug.endswith("-flex")]:
-        item = items[part.slug] = put(part.slug, part.label + "1", -part.origin[0], -part.origin[1])
+    sockets = {k: v for k, v in connector_boxes(svgs[b["part"].slug]["breadboard"]).items() if k.startswith("connector")}
+    flex = [p for p in parts.values() if p.home and p.slug.endswith("-flex")]
+    items = {p.slug: put(p.slug, p.label + "1", -p.origin[0], -p.origin[1]) for p in flex}
+    lamp = put("lamp", "Lamp1", -76, 47)
+    put("dc-motor-fan", "Fan1", -118, 118)
+    # The plugs go in last, so they lie on top of everything: a press on a plug always reaches
+    # the plug, never a sensor or the board that happens to lie under it.
+    for part in flex:
+        item = items[part.slug]
         pins, d0 = plugin.home(part.home)
         count = len(pins)
         plug = parts[PLUG_FOR.get(part.slug, "cable-plug-3-wire" if count == 3 else "cable-plug-4-wire")]
@@ -96,15 +128,28 @@ def kit_sketch(parts: dict[str, Part], svgs: dict[str, dict[str, str]], plugged:
         p = put(plug.slug, f"Plug {board.CONN[part.home]['label']}", pins[0][0] + d0[0] * shift - fx, pins[0][1] + d0[1] * shift - fy,
                 turn)
         colours = plug.props["wires"].split(", ")
+        # the plug's own box, which is what Fritzing takes a press on the plug by: seated, it must
+        # hide every pin of its socket, so that no press there can pull a wire out of the board
+        w, h = (plug.bb_size[::-1] if turn == 90 else plug.bb_size)
+        cx, cy = ((v - o) / PX + s / 2 for v, o, s in zip(p["bb"], b["bb"], plug.bb_size))
+        for k in range(count if plugged else 0):
+            bx, by, bw, bh = sockets[f"connector{board.WHERE[(part.home, k)]}pin"]
+            if not (cx - w / 2 <= bx and bx + bw <= cx + w / 2 and cy - h / 2 <= by and by + bh <= cy + h / 2):
+                raise SystemExit(f"{plug.slug} at {part.home}: socket pin {k} shows beside the plug")
         for k in range(count):
+            # where Fritzing looks when the plug is dropped: the centre of the plug pin. Seated,
+            # it must lie inside its own socket pin and no other; waiting, inside none.
+            x, y = ((v - o) / PX for v, o in zip(sk.point(p, k), b["bb"]))
+            under = [c for c, (bx, by, bw, bh) in sockets.items() if bx <= x <= bx + bw and by <= y <= by + bh]
+            want = [f"connector{board.WHERE[(part.home, k)]}pin"] if plugged else []
+            if under != want:
+                raise SystemExit(f"{plug.slug} at {part.home}: pin {k} lies on {under}, expected {want}")
             if plugged:
                 sk.plug(p, k, b, board.WHERE[(part.home, k)])
             WIRE_COLOURS[colours[k]] = {"white": "#f4f4f1", "black": "#404040"}.get(colours[k], plugin.WIRE[colours[k]])
             sk.wire(item, part.pins[k].name, p, plug.pins[count + k].name, colours[k])
     # the load, with plain wires as in the kit: 5 V to COM, the lamp between NO and GND
     relay = items["relay-module-flex"]
-    lamp = put("lamp", "Lamp1", -76, 47)
-    put("dc-motor-fan", "Fan1", -118, 118)
     l2, com = sk.point(lamp, sk.pin(lamp, "L2")), sk.point(relay, sk.pin(relay, "COM"))
     sk.wire(lamp, "L1", relay, "NO", "load")
     sk.wire(b, "5V GND", lamp, "L2", "gnd",

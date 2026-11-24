@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-hc-sr04-r2" referenceFile="hc-sr04.fzp">
+<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-hc-sr04-r4" referenceFile="hc-sr04.fzp">
  <version>1</version>
  <author>MakerBuddy (https://makerbuddy.cc)</author>
  <title>HC-SR04 ultrasonic distance sensor with its cable (MakerBuddy)</title>
@@ -23,7 +23,7 @@
   <property name="board connector">HC-SR04</property>
   <property name="cable">kit cable with plug</property>
  </properties>
- <description>HC-SR04 ultrasonic distance sensor, 2 cm to 4 m. Pins left to right: Vcc, Trig, Echo, Gnd. On the MakerBuddy IoT Kit board it uses the HC-SR04 connector, printed VCC GND 2 15: Trig goes to 15 and Echo to 2, so the two middle wires cross. The kit part carries a 4-pin JST adapter on its back. This part comes with the kit's 4-wire cable and its plug: drop the plug on the HC-SR04 connector of the MakerBuddy IoT Kit board and all 4 pins connect at once. https://makerbuddy.cc</description>
+ <description>HC-SR04 ultrasonic distance sensor, 2 cm to 4 m. Pins left to right: Vcc, Trig, Echo, Gnd. On the MakerBuddy IoT Kit board it uses the HC-SR04 connector, printed VCC GND 2 15: Trig goes to 15 and Echo to 2. The kit part carries a green adapter with a 4-pin JST socket on its back; the adapter is drawn below the board so the socket and the cable's plug can be seen. This part comes with the kit's 4-wire cable and its plug: drop the plug on the HC-SR04 connector of the MakerBuddy IoT Kit board and all 4 pins connect at once. https://makerbuddy.cc</description>
  <views>
   <iconView>
    <layers image="icon/hc-sr04_icon.svg">
@@ -52,7 +52,7 @@
   <connector id="connector0" name="VCC" type="male">
    <description>5 V supply. Board HC-SR04 connector: VCC.</description>
    <views>
-    <breadboardView><p layer="breadboard" svgId="connector0pin"/></breadboardView>
+    <breadboardView><p layer="breadboard" svgId="connector0pin" hybrid="yes"/></breadboardView>
     <schematicView><p layer="schematic" svgId="connector0pin" terminalId="connector0terminal"/></schematicView>
     <pcbView><p layer="copper0" svgId="connector0pin"/><p layer="copper1" svgId="connector0pin"/></pcbView>
    </views>
@@ -60,7 +60,7 @@
   <connector id="connector1" name="GND" type="male">
    <description>Ground. Board HC-SR04 connector: GND.</description>
    <views>
-    <breadboardView><p layer="breadboard" svgId="connector1pin"/></breadboardView>
+    <breadboardView><p layer="breadboard" svgId="connector1pin" hybrid="yes"/></breadboardView>
     <schematicView><p layer="schematic" svgId="connector1pin" terminalId="connector1terminal"/></schematicView>
     <pcbView><p layer="copper0" svgId="connector1pin"/><p layer="copper1" svgId="connector1pin"/></pcbView>
    </views>
@@ -68,7 +68,7 @@
   <connector id="connector2" name="Echo" type="male">
    <description>Echo output: high for as long as the sound travels. Board HC-SR04 connector: 2.</description>
    <views>
-    <breadboardView><p layer="breadboard" svgId="connector2pin"/></breadboardView>
+    <breadboardView><p layer="breadboard" svgId="connector2pin" hybrid="yes"/></breadboardView>
     <schematicView><p layer="schematic" svgId="connector2pin" terminalId="connector2terminal"/></schematicView>
     <pcbView><p layer="copper0" svgId="connector2pin"/><p layer="copper1" svgId="connector2pin"/></pcbView>
    </views>
@@ -76,7 +76,7 @@
   <connector id="connector3" name="Trig" type="male">
    <description>Trigger input: a 10 µs pulse starts a measurement. Board HC-SR04 connector: 15.</description>
    <views>
-    <breadboardView><p layer="breadboard" svgId="connector3pin"/></breadboardView>
+    <breadboardView><p layer="breadboard" svgId="connector3pin" hybrid="yes"/></breadboardView>
     <schematicView><p layer="schematic" svgId="connector3pin" terminalId="connector3terminal"/></schematicView>
     <pcbView><p layer="copper0" svgId="connector3pin"/><p layer="copper1" svgId="connector3pin"/></pcbView>
    </views>
