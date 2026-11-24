@@ -129,9 +129,11 @@ and `I2C3` (top).
 - Fritzing 1.0.2 on macOS opened the example sketch with all twelve part types in it, and a second
   sketch with the green board, and exported the breadboard, schematic and PCB views of both with no
   errors. The picture at the top of this page is that export.
-- **Not tested:** importing the `.fzbz` bin and the single `.fzpz` files by hand through Fritzing's
-  File menu (they hold the same files as the sketch, in the layout Fritzing's own export uses),
-  older Fritzing versions, and PCB fabrication from the footprints. If something does not open,
+- The parts bin `MakerBuddy-IoT-Kit.fzbz` was opened in Fritzing 1.0.2 on macOS: Fritzing unpacked
+  all 13 parts and the **MakerBuddy IoT Kit** bin appeared in the Parts window.
+- **Not tested:** opening the single `.fzpz` files one at a time (they hold the same files as the
+  bin), older Fritzing versions, Windows and Linux, and PCB fabrication from the footprints. If
+  something does not open,
   please [open an issue](https://github.com/MakerBuddy/MakerBuddy-IoT-Kit-Fritzing-Parts/issues).
 
 ## What is in this repository
