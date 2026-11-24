@@ -170,11 +170,9 @@ and `I2C3` (top).
   layer names are the ones Fritzing looks for, and no drawing uses anything Fritzing cannot read.
 - Fritzing 1.0.2 on macOS opened both sketches and exported their breadboard, schematic and PCB
   views with no errors. The two pictures at the top of this page are those exports.
-- The parts bin opens in Fritzing 1.0.2 and shows in the Parts window. Dropping a bin sensor's
-  plug on its socket was tried by hand: it connects.
-- **Not confirmed by hand yet:** dragging a plug in the starter sketch. It uses the same two
-  things: a plug's pins dropped on a socket connect (confirmed above), and Fritzing wires follow
-  the part they are attached to.
+- Tried by hand in Fritzing 1.0.2 on macOS: the parts bin opens and shows in the Parts window;
+  dropping a bin sensor's plug on its socket connects it; and in the starter sketch, dragging a
+  plug onto its socket connects it with the cable following.
 - **Tried and dropped:** cables made of Fritzing's "bendable legs". The loose wire ends could not
   be plugged in by hand and the plug was no longer drawn.
 - **Not tested:** older Fritzing versions, Windows and Linux, and PCB fabrication from the
