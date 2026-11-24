@@ -158,9 +158,9 @@ and `I2C3` (top).
   under them. Its wires are in the board's order (VCC, GND, Echo, Trig and VCC, GND, SCL, SDA).
 - **Assumed:** the order of the four solder joints on the LCD's adapter tab (GND, VCC, SDA, SCL
   from the top, as on a standard PCF8574 backpack). The pin names are right either way.
-- **Footprints:** a part with a cable gets the footprint of the socket it plugs into (a pin
-  header, 2.54 mm spacing). The module-only parts show the module's outline and where its socket
-  sits. Nobody has made a PCB from them yet: check them against your own part before ordering one.
+- **Footprints:** every sensor and plug gets the footprint of the socket it plugs into (a pin
+  header, 2.54 mm spacing); the relay adds three pads for its terminals. Nobody has made a PCB
+  from them yet: check them against your own part before ordering one.
 - The V1.0 board is the one drawn here. It is the board in the kit and in the photographs.
 
 ## What was tested
