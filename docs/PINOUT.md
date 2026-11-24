@@ -281,7 +281,7 @@ Fritzing connector (`connector<n>`), which is also the `id` of the pin in every 
 | # | Pin | What it is | Net |
 |---|---|---|---|
 | 0 | M+ | Motor lead, red. To the relay's NO terminal; the relay's COM goes to the board's 5V connector. |  |
-| 1 | M- | Motor lead, black. To GND. |  |
+| 1 | M- | Motor lead, black. To GND, for example the GND pin of the board's 5V connector. |  |
 
 ## 6 V lamp in a holder with leads (MakerBuddy)
 
@@ -290,7 +290,102 @@ Fritzing connector (`connector<n>`), which is also the `id` of the pin in every 
 | # | Pin | What it is | Net |
 |---|---|---|---|
 | 0 | L1 | Lamp lead, orange. To the relay's NO terminal; the relay's COM goes to the board's 5V connector. |  |
-| 1 | L2 | Lamp lead, black. To GND. |  |
+| 1 | L2 | Lamp lead, black. To GND, for example the GND pin of the board's 5V connector. |  |
+
+## DS18B20 waterproof temperature probe with fixed lead and plug (MakerBuddy)
+
+`ds18b20-probe-fixed-cable` · 3 pins · plugs into `26`
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | DQ | 1-Wire data (yellow wire). On the board: connector 26, which has the 4.7 k pull-up. |  |
+| 1 | VCC | Supply, 3.0 to 5.5 V (red wire) |  |
+| 2 | GND | Ground (black wire) |  |
+
+## DHT11 temperature and humidity sensor with fixed cable and plug (MakerBuddy)
+
+`dht11-fixed-cable` · 3 pins · plugs into `25`
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | DATA | Temperature and humidity data (one wire). On the board: connector 25. |  |
+| 1 | VCC | 5 V supply |  |
+| 2 | GND | Ground |  |
+
+## MQ-2 gas and smoke sensor with fixed cable and plug (MakerBuddy)
+
+`mq2-gas-sensor-fixed-cable` · 3 pins · plugs into `33`
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | AO | Analog output: rises with smoke and gas. On the board: connector 33 (GPIO 33). |  |
+| 1 | VCC | 5 V supply (the heater draws about 150 mA) |  |
+| 2 | GND | Ground |  |
+
+## Capacitive soil moisture sensor v2.0 with fixed cable and plug (MakerBuddy)
+
+`soil-moisture-sensor-fixed-cable` · 3 pins · plugs into `32`
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | AOUT | Analog output: falls as the soil gets wetter. On the board: connector 32 (GPIO 32). |  |
+| 1 | VCC | Supply, 3.3 to 5.5 V |  |
+| 2 | GND | Ground |  |
+
+## 5 V relay module, 1 channel with fixed cable and plug (MakerBuddy)
+
+`relay-module-fixed-cable` · 6 pins · plugs into `23`
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | IN | Coil control input, active high. On the board: connector 23 (GPIO 23). |  |
+| 1 | VCC | 5 V supply for the coil |  |
+| 2 | GND | Ground |  |
+| 3 | NO | Normally open contact: joined to COM while the relay is on |  |
+| 4 | COM | Common contact |  |
+| 5 | NC | Normally closed contact: joined to COM while the relay is off |  |
+
+## SG90 micro servo with fixed lead and plug (MakerBuddy)
+
+`sg90-servo-fixed-cable` · 3 pins · plugs into `19`
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | PWM | Control signal (orange wire). On the board: connector 19 (GPIO 19). |  |
+| 1 | VCC | 5 V supply (red wire) |  |
+| 2 | GND | Ground (brown wire) |  |
+
+## HC-SR501 PIR motion sensor with fixed cable and plug (MakerBuddy)
+
+`hc-sr501-pir-fixed-cable` · 3 pins · plugs into `18`
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | OUT | Digital output: high while it sees movement. On the board: connector 18 (GPIO 18). |  |
+| 1 | VCC | 5 V supply |  |
+| 2 | GND | Ground |  |
+
+## HC-SR04 ultrasonic distance sensor with fixed cable and plug (MakerBuddy)
+
+`hc-sr04-fixed-cable` · 4 pins · plugs into `HC-SR04`
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | VCC | 5 V supply. Board HC-SR04 connector: VCC. |  |
+| 1 | GND | Ground. Board HC-SR04 connector: GND. |  |
+| 2 | Echo | Echo output: high for as long as the sound travels. Board HC-SR04 connector: 2. |  |
+| 3 | Trig | Trigger input: a 10 µs pulse starts a measurement. Board HC-SR04 connector: 15. |  |
+
+## LCD 16x2 with I2C backpack with fixed cable and plug (MakerBuddy)
+
+`lcd-1602-i2c-fixed-cable` · 4 pins · plugs into `I2C`
+
+| # | Pin | What it is | Net |
+|---|---|---|---|
+| 0 | VCC | 5 V supply |  |
+| 1 | GND | Ground |  |
+| 2 | SCL | I2C clock. On the board: any I2C connector (GPIO 22). |  |
+| 3 | SDA | I2C data. On the board: any I2C connector (GPIO 21). |  |
 
 ## DHT11 temperature and humidity sensor, module only (MakerBuddy)
 

@@ -1,12 +1,18 @@
-"""The kit parts as they are used: the part, its cable and the plug that goes into the board,
-drawn as one piece.
+"""The kit parts as they are used: each part with its cable.
 
 The kit has no loose wires. A sensor reaches the board through a JST cable, and the whole plug
-goes into one socket. Fritzing does the same thing when a part's plug pins are dropped onto a
-socket: every pin of the plug connects at once. So each part here ends in a plug whose pins sit
-exactly where the pins of its home connector are, and the part is drawn where it lies when it
-is plugged in there. Drop the plug on the socket and the part is connected; the rest of the
-drawing keeps clear of the other parts' places, so the whole kit can be plugged in at once.
+goes into one socket. Two things in Fritzing come close to that, and both are built here.
+
+flexible (the parts in the bin): the wires of the cable are "bendable legs", the leads Fritzing
+gives its own LEDs, motors and battery clips. A lead's free end can be dragged onto a pin, and
+with Alt held the part can be moved while its leads stay where they are and stretch. Each part
+is drawn where it lies beside the board with its lead ends exactly on the pins of its home
+socket, so dropping it there connects every wire at once; after that it can go anywhere.
+
+fixed (fritzing/parts/fixed-cable/): the part, a drawn cable and a drawn plug as one rigid
+piece. Dropping the plug on the socket connects it, but the part cannot be moved away from it.
+
+Fritzing has no cable whose plug moves as one piece: it moves a whole part, or one wire end.
 """
 from __future__ import annotations
 
@@ -16,7 +22,7 @@ import re
 import modules
 from board import CONN
 from common import (HOUSING, HOUSING_EDGE, HOUSING_IN, KIT_CABLE_3, KIT_CABLE_4, METAL, METAL_DARK, PITCH, WIRE,
-                    WIRE_EDGE, Part, Pin, cid, silk_text, wire)
+                    WIRE_EDGE, Part, Pin, cid, leg, silk_text, wire)
 from modules import PAD_SCREW, SITE, lead_footprint
 from svgkit import circle, crect, g, n, path, polygon, rect, stroke
 
@@ -189,11 +195,110 @@ def cabled(bare: Part, conn_id: str, x, y, turn=0, l0=14.0, l1=8.0, pin_order=No
         home=conn_id, origin=origin, in_bin=True)
 
 
+def as_fixed(part: Part) -> Part:
+    """The rigid version, kept outside the bin."""
+    return dataclasses.replace(
+        part, slug=part.slug + "-fixed-cable",
+        title=part.title.replace(" with its cable (MakerBuddy)", " with fixed cable and plug (MakerBuddy)")
+        .replace(" on its lead (MakerBuddy)", " with fixed lead and plug (MakerBuddy)"),
+        props={**part.props, "cable": "fixed, with plug"}, in_bin=False, folder="fixed-cable")
+
+
+# ---------------------------------------------------------------- modules on bendable leads
+
+def crosses(a1, a2, b1, b2) -> bool:
+    side = lambda p, q, r: (q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0])
+    return side(a1, a2, b1) * side(a1, a2, b2) < 0 and side(b1, b2, a1) * side(b1, b2, a2) < 0
+
+
+def leads(dr: Drawing, roots, ends, colours) -> None:
+    """One bendable lead per pin, from the part to the socket, never crossing each other."""
+    if crosses(roots[0], ends[0], roots[-1], ends[-1]):
+        roots = roots[::-1]
+    for k, (root, end, colour) in enumerate(zip(roots, ends, colours)):
+        dr.add(leg(k, root, end, colour), root, end)
+
+
+def flexible(bare: Part, conn_id: str, x, y, turn=0, roots=None, pin_order=None) -> Part:
+    """A module with the kit cable as bendable leads. (x, y) is where its drawing goes in board
+    millimetres; `roots` says where the leads come out when the socket is on the back."""
+    sock = modules.SOCKETS[bare.slug]
+    pins, _ = home(conn_id)
+    count = len(pins)
+    colours = KIT_CABLE_3 if count == 3 else KIT_CABLE_4
+    tf, at, _turn_dir, corners = placed(bare, x, y, turn)
+    keep = {3: 3, 4: 4, 5: 5} if bare.slug == "relay-module" else {}
+    dr = Drawing()
+    dr.add(g(strip_pins(bare.bb_body, keep), transform=tf), *corners)
+    if roots is None:                              # the leads leave the plug sitting in the module's socket
+        art, _end, cap_corners = module_cap(sock)
+        dr.add(g(art, transform=tf), *[at(*c) for c in cap_corners])
+        (cx, cy), (ex, ey) = sock["c"], sock["exit"]
+        edge = (cx + 7.4, cy) if sock.get("side") else (cx + ex * 2.2, cy + ey * 2.2)
+        roots = [(edge[0] - ey * (k - (count - 1) / 2) * 1.3, edge[1] + ex * (k - (count - 1) / 2) * 1.3)
+                 for k in range(count)]
+    leads(dr, [at(*r) for r in roots], pins, colours)
+    size, art_all, origin = dr.finish()
+    fixed = cabled(bare, conn_id, x, y, turn, pin_order=pin_order)   # for its pins and footprint only
+    label = CONN[conn_id]["label"]
+    where = f"connector {label}" if label.isdigit() else f"the {label} connector"
+    pins_out = [dataclasses.replace(p, leg=(k < count)) for k, p in enumerate(fixed.pins)]
+    return dataclasses.replace(
+        fixed, module_id=f"makerbuddy-kit-{bare.slug}-r3", pins=pins_out, bb_size=size, bb_body=art_all, origin=origin,
+        description=(bare.description.replace(" " + SITE, "")
+                     + f" This part comes with the kit's {count}-wire cable. Drop it with the cable's ends on {where} "
+                       f"of the MakerBuddy IoT Kit board and all {count} wires connect; then hold Alt (Option) and "
+                       "drag the part to move it while the cable stays plugged in. Each wire end can also be dragged "
+                       "to a pin on its own. " + SITE),
+        props={**bare.props, "cable": "kit cable, flexible"})
+
+
+def servo_flexible() -> Part:
+    fixed = servo()
+    pins, _ = home("PORT_19")
+    dr = Drawing()
+    fx, fy = 7.0, 96.5
+    dr.add(servo_body(fx, fy), (fx, fy - 0.4), (fx + 32.3, fy + 12.6))
+    leads(dr, [(fx + 2.0 + k * 1.1, fy + 0.2) for k in range(3)], pins, ["orange", "red", "brown"])
+    size, body, origin = dr.finish()
+    return dataclasses.replace(
+        fixed, module_id="makerbuddy-kit-sg90-servo-r3", bb_size=size, bb_body=body, origin=origin,
+        pins=[dataclasses.replace(p, leg=True) for p in fixed.pins],
+        description=fixed.description.replace(
+            "Drop the plug on connector 19 of the MakerBuddy IoT Kit board and all three pins connect at once.",
+            "Drop it with the lead's ends on connector 19 of the MakerBuddy IoT Kit board and all three wires connect; "
+            "then hold Alt (Option) and drag the servo to move it while the lead stays plugged in."),
+        props={**fixed.props, "cable": "own lead, flexible"})
+
+
+def ds18b20_flexible() -> Part:
+    fixed = ds18b20()
+    pins, _ = home("PORT_26")
+    dr = Drawing()
+    stub = "M84 1V7"
+    dr.add(stroke(stub, "#000000", 4.3, cap="butt") + stroke(stub, "#222226", 3.8, cap="butt"), (82, 1), (86, 7))
+    dr.add(path("M81 -12V-42a3 3 0 0 1 6 0V-12Z", "#c9cdd2", stroke="#868c92", stroke_width=0.2)
+           + stroke("M82.6 -41V-14", "#f1f3f5", 0.7), (81, -45), (87, -12))
+    dr.add(rect(80.4, -13, 7.2, 14.5, "#19191c", rx=0.8, stroke="#000000", stroke_width=0.15), (80.4, -13), (87.6, 1.5))
+    leads(dr, [(84 + (k - 1) * 0.95, 7.2) for k in range(3)], pins, ["yellow", "red", "black"])
+    size, body, origin = dr.finish()
+    return dataclasses.replace(
+        fixed, module_id="makerbuddy-kit-ds18b20-probe-r3", bb_size=size, bb_body=body, origin=origin,
+        pins=[dataclasses.replace(p, leg=True) for p in fixed.pins],
+        description=fixed.description.replace(
+            "Drop the plug on connector 26 of the MakerBuddy IoT Kit board, the connector with the 4.7 k 1-Wire "
+            "pull-up, and all three pins connect at once.",
+            "Drop it with the lead's ends on connector 26 of the MakerBuddy IoT Kit board, the connector with the "
+            "4.7 k 1-Wire pull-up, and all three wires connect; then hold Alt (Option) and drag the probe to move it "
+            "while the lead stays plugged in."),
+        props={**fixed.props, "cable": "own lead, flexible"})
+
+
 def module_only(bare: Part) -> Part:
     return dataclasses.replace(
         bare, slug=bare.slug.removesuffix("-module") + "-module-only", module_id=f"makerbuddy-kit-{bare.slug}-bare-r2",
         title=bare.title.replace(" (MakerBuddy)", ", module only (MakerBuddy)"),
-        props={**bare.props, "cable": "none"}, in_bin=False)
+        props={**bare.props, "cable": "none"}, in_bin=False, folder="module-only")
 
 
 # ---------------------------------------------------------------- parts with their own lead
@@ -208,16 +313,8 @@ def own_lead(slug, title, label, summary, description, tags, props, names, conn_
                 pcb_size=pcb_size, pcb_silk=pcb_silk, sch_title=sch, photo=photo, home=conn_id, origin=origin)
 
 
-def servo() -> Part:
-    pins, d0 = home("PORT_19")
-    colours = ["orange", "red", "brown"]
-    body, entries, starts, corners = board_plug(pins, d0, colours)
-    dr = Drawing()
-    dr.add(body, *corners)
-    fx, fy = 14.0, 106.0                      # the servo's mounting flange, top-left corner
-    for (d, lane, o), colour in zip(starts, colours):
-        ex = fx + 3.0 + o * 0.9
-        dr.add(wire(d + f"C{n(lane[0])} {n(lane[1] + 12)} {n(ex)} {n(fy - 11)} {n(ex)} {n(fy + 0.6)}", colour, 0.95))
+def servo_body(fx, fy) -> str:
+    """The SG90 seen facing its shaft; (fx, fy) is the top-left corner of its mounting flange."""
     cx, cy = fx + 16.15, fy + 6.1
     sx = cx + 5.35
     art = [rect(fx, fy, 32.3, 12.2, "#1f4fbf", rx=0.8, stroke="#16388a", stroke_width=0.15)]
@@ -233,7 +330,20 @@ def servo() -> Part:
     art += [circle(sx - k, cy, 0.4, "#b9b4a8") for k in (5.5, 7.5, 9.5, 11.5, 13.5)]
     art.append(circle(sx, cy, 1.0, METAL, stroke=METAL_DARK, stroke_width=0.12)
                + stroke(f"M{n(sx - 0.6)} {n(cy)}h1.2M{n(sx)} {n(cy - 0.6)}v1.2", METAL_DARK, 0.2))
-    dr.add("".join(art), (fx, fy - 0.4), (fx + 32.3, fy + 12.6))
+    return "".join(art)
+
+
+def servo() -> Part:
+    pins, d0 = home("PORT_19")
+    colours = ["orange", "red", "brown"]
+    body, entries, starts, corners = board_plug(pins, d0, colours)
+    dr = Drawing()
+    dr.add(body, *corners)
+    fx, fy = 14.0, 106.0                      # the servo's mounting flange, top-left corner
+    for (d, lane, o), colour in zip(starts, colours):
+        ex = fx + 3.0 + o * 0.9
+        dr.add(wire(d + f"C{n(lane[0])} {n(lane[1] + 12)} {n(ex)} {n(fy - 11)} {n(ex)} {n(fy + 0.6)}", colour, 0.95))
+    dr.add(servo_body(fx, fy), (fx, fy - 0.4), (fx + 32.3, fy + 12.6))
     dr.add(entries)
     return own_lead(
         "sg90-servo", "SG90 micro servo on its lead (MakerBuddy)", "M",
@@ -280,10 +390,24 @@ def ds18b20() -> Part:
 
 # ---------------------------------------------------------------- the kit, each part in its place
 
-def kit() -> tuple[list[Part], list[Part]]:
-    """The plug-in parts in the order of the board's connectors, and the bare modules."""
+def kit() -> tuple[list[Part], list[Part], list[Part]]:
+    """The parts of the bin in the order of the board's connectors, their rigid versions, and the
+    bare modules. Places are in board millimetres and chosen so the leads reach each socket at an
+    angle (leads that run along a row of pins would lie on top of each other)."""
     bare = {p.slug: p for p in modules.bare_modules()}
-    plug_in = [
+    flex = [
+        ds18b20_flexible(),
+        flexible(bare["dht11"], "PORT_25", 92.2, -17.8),
+        flexible(bare["mq2-gas-sensor"], "PORT_33", 99.5, 57.1),
+        flexible(bare["soil-moisture-sensor"], "PORT_32", 76.0, 68.8, turn=-90),
+        flexible(bare["relay-module"], "PORT_23", -55.1, 82.26),
+        servo_flexible(),
+        flexible(bare["hc-sr501-pir"], "PORT_18", 41.45, 78.1),
+        flexible(bare["hc-sr04"], "HCSR04", -37.75, -23.9, roots=[(19.75 + (k - 1.5) * 1.3, 21.9) for k in range(4)],
+                 pin_order=[0, 3, 2, 1]),
+        flexible(bare["lcd-1602-i2c"], "I2C_1", -100.0, 8.0, roots=[(84.0 + (k - 1.5) * 1.3, 37.0) for k in range(4)]),
+    ]
+    fixed = [
         ds18b20(),
         cabled(bare["dht11"], "PORT_25", 111, -14, l0=24, l1=8),
         cabled(bare["mq2-gas-sensor"], "PORT_33", 110, 45, l0=24, l1=7),
@@ -294,4 +418,4 @@ def kit() -> tuple[list[Part], list[Part]]:
         cabled(bare["hc-sr04"], "HCSR04", -62, -14, l0=18, l1=12, pin_order=[0, 3, 2, 1]),
         cabled(bare["lcd-1602-i2c"], "I2C_1", -104, 20, l0=88, l1=30),
     ]
-    return plug_in, [module_only(p) for p in bare.values()]
+    return flex, [as_fixed(p) for p in fixed], [module_only(p) for p in bare.values()]

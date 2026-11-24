@@ -56,6 +56,8 @@ def check(part: Part, svgs: dict[str, str]) -> list[str]:
         for i in range(len(part.pins)):
             if f"connector{i}pin" not in ids:
                 problems.append(f"{view}: connector{i}pin missing")
+            if view == "breadboard" and part.pins[i].leg and f"connector{i}leg" not in ids:
+                problems.append(f"{view}: connector{i}leg missing")
             if view == "schematic" and f"connector{i}terminal" not in ids:
                 problems.append(f"{view}: connector{i}terminal missing")
         w, h = float(root.get("width")[:-2]), float(root.get("height")[:-2])
@@ -66,11 +68,11 @@ def check(part: Part, svgs: dict[str, str]) -> list[str]:
 
 
 def example(parts: dict[str, Part], svgs: dict[str, dict[str, str]]) -> Sketch:
-    """The whole kit on the purple board: every plug-in part in its home socket, and the lamp
-    wired through the relay to the 5V connector."""
+    """The whole kit on the purple board: every cable in its home socket, and the lamp on the
+    relay. One wire is drawn: 5 V to the relay's COM terminal."""
     sk = Sketch()
     grid = iter([(c * 420.0, r * 360.0) for r in range(4) for c in range(4)])
-    ox, oy = 480.0, 280.0                         # the board's corner on the breadboard page
+    ox, oy = 480.0, 300.0                         # the board's corner on the breadboard page
     mm = lambda x, y: (ox + x * PX, oy + y * PX)  # board millimetres to page units
 
     def put(slug, title, x, y):
@@ -80,20 +82,25 @@ def example(parts: dict[str, Part], svgs: dict[str, dict[str, str]]) -> Sketch:
     b = put("makerbuddy-iot-kit-v1-purple", "MakerBuddy1", -board.M, -board.M)
     placed = {}
     for part in parts.values():
-        if not part.home:
+        if not part.home or not part.in_bin:
             continue
         item = placed[part.slug] = put(part.slug, part.label + "1", -part.origin[0], -part.origin[1])
-        for k in range(len(board.CONN[part.home]["pins"])):       # plug pin k sits on socket pin k
+        for k in range(len(board.CONN[part.home]["pins"])):       # lead k ends on socket pin k
             sk.plug(item, k, b, board.WHERE[(part.home, k)])
-    # the load: the 5V connector feeds COM, the lamp sits between NO and GND (plain wires, as in the kit)
+    # the load: the lamp's orange lead sits in the relay's NO terminal, its black lead goes to GND,
+    # and the 5V connector feeds COM
     relay = placed["relay-module"]
-    lamp = put("lamp", "Lamp1", -92, 66)
-    put("dc-motor-fan", "Fan1", -112, 128)
-    sk.wire(lamp, "L1", relay, "NO", "load")
+    no = sk.point(relay, sk.pin(relay, "NO"))
+    lamp_part = parts["lamp"]
+    lead = connector_centres(svgs["lamp"]["breadboard"])["connector0end"]
+    lamp = sk.place(lamp_part, svgs["lamp"], "Lamp1", (no[0] - lead[0] * PX, no[1] - lead[1] * PX), next(grid), (0, 0))
+    sk.plug(lamp, 0, relay, sk.pin(relay, "NO"))
+    put("dc-motor-fan", "Fan1", -112, 118)
+    l2, com = sk.point(lamp, 1), sk.point(relay, sk.pin(relay, "COM"))
     sk.wire(b, "5V GND", lamp, "L2", "gnd",
-            via=[mm(79, 12.42), mm(79, -48.4), mm(-106.4, -48.4), mm(-106.4, 116), mm(-87, 116)])
+            via=[mm(63.2, 9.4), mm(63.2, -52), mm(-106.5, -52), (mm(-106.5, 0)[0], l2[1])])
     sk.wire(b, "5V VCC", relay, "COM", "load",
-            via=[mm(65, 13.9), mm(80.6, 13.9), mm(80.6, -50), mm(-108, -50), mm(-108, 121), mm(-52, 121), mm(-52, 104)])
+            via=[mm(64.5, 10.4), mm(64.5, -53.6), mm(-108, -53.6), (mm(-108, 0)[0], com[1])])
     return sk
 
 
@@ -111,11 +118,11 @@ def pinout_md(parts: list[Part]) -> str:
 
 
 def main() -> int:
-    plug_in, bare = plugin.kit()
-    parts = [board.make("purple"), board.make("green")] + plug_in + modules.loads() + bare
+    flex, fixed, bare = plugin.kit()
+    parts = [board.make("purple"), board.make("green")] + flex + modules.loads() + fixed + bare
     by_slug = {p.slug: p for p in parts}
-    for sub in ("svg/breadboard", "svg/schematic", "svg/pcb", "fritzing/parts/module-only", "fritzing/fzp", "examples",
-                "docs/pcb"):
+    for sub in ("svg/breadboard", "svg/schematic", "svg/pcb", "fritzing/parts/module-only", "fritzing/parts/fixed-cable",
+                "fritzing/fzp", "examples", "docs/pcb"):
         (ROOT / sub).mkdir(parents=True, exist_ok=True)
     all_svgs: dict[str, dict[str, str]] = {}
     everything: dict[str, str] = {}
@@ -132,7 +139,7 @@ def main() -> int:
         (ROOT / "docs" / "pcb" / f"{part.slug}.svg").write_text(dark)
         (ROOT / "fritzing" / "fzp" / f"{part.slug}.fzp").write_text(fzp(part))
         files = bundle_files(part, svgs)
-        folder = ROOT / "fritzing" / "parts" / ("" if part.in_bin else "module-only")
+        folder = ROOT / "fritzing" / "parts" / part.folder
         write_zip(folder / f"{part.slug}.fzpz", files)
         if part.in_bin:
             everything.update(files)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-lcd-1602-i2c-r2" referenceFile="lcd-1602-i2c.fzp">
+<module fritzingVersion="1.0.2" moduleId="makerbuddy-kit-lcd-1602-i2c-r3" referenceFile="lcd-1602-i2c.fzp">
  <version>1</version>
  <author>MakerBuddy (https://makerbuddy.cc)</author>
  <title>LCD 16x2 with I2C backpack with its cable (MakerBuddy)</title>
@@ -24,9 +24,9 @@
   <property name="interface">I2C (PCF8574, 0x27)</property>
   <property name="connector">JST-XH 4-pin</property>
   <property name="board connector">I2C</property>
-  <property name="cable">kit cable with plug</property>
+  <property name="cable">kit cable, flexible</property>
  </properties>
- <description>16 x 2 character LCD (HD44780) with a PCF8574 I2C backpack at address 0x27 and the MakerBuddy JST adapter on its left edge. Four wires: VCC, GND, SCL, SDA. Plugs into any of the three I2C positions of the MakerBuddy IoT Kit board. The order of the four joints on the adapter tab is taken from the standard backpack (GND, VCC, SDA, SCL from the top); the names are what matter in Fritzing. This part comes with the kit's 4-wire cable and its plug: drop the plug on the I2C connector of the MakerBuddy IoT Kit board and all 4 pins connect at once. https://makerbuddy.cc</description>
+ <description>16 x 2 character LCD (HD44780) with a PCF8574 I2C backpack at address 0x27 and the MakerBuddy JST adapter on its left edge. Four wires: VCC, GND, SCL, SDA. Plugs into any of the three I2C positions of the MakerBuddy IoT Kit board. The order of the four joints on the adapter tab is taken from the standard backpack (GND, VCC, SDA, SCL from the top); the names are what matter in Fritzing. This part comes with the kit's 4-wire cable. Drop it with the cable's ends on the I2C connector of the MakerBuddy IoT Kit board and all 4 wires connect; then hold Alt (Option) and drag the part to move it while the cable stays plugged in. Each wire end can also be dragged to a pin on its own. https://makerbuddy.cc</description>
  <views>
   <iconView>
    <layers image="icon/lcd-1602-i2c_icon.svg">
@@ -55,7 +55,7 @@
   <connector id="connector0" name="VCC" type="male">
    <description>5 V supply</description>
    <views>
-    <breadboardView><p layer="breadboard" svgId="connector0pin"/></breadboardView>
+    <breadboardView><p layer="breadboard" svgId="connector0pin" legId="connector0leg"/></breadboardView>
     <schematicView><p layer="schematic" svgId="connector0pin" terminalId="connector0terminal"/></schematicView>
     <pcbView><p layer="copper0" svgId="connector0pin"/><p layer="copper1" svgId="connector0pin"/></pcbView>
    </views>
@@ -63,7 +63,7 @@
   <connector id="connector1" name="GND" type="male">
    <description>Ground</description>
    <views>
-    <breadboardView><p layer="breadboard" svgId="connector1pin"/></breadboardView>
+    <breadboardView><p layer="breadboard" svgId="connector1pin" legId="connector1leg"/></breadboardView>
     <schematicView><p layer="schematic" svgId="connector1pin" terminalId="connector1terminal"/></schematicView>
     <pcbView><p layer="copper0" svgId="connector1pin"/><p layer="copper1" svgId="connector1pin"/></pcbView>
    </views>
@@ -71,7 +71,7 @@
   <connector id="connector2" name="SCL" type="male">
    <description>I2C clock. On the board: any I2C connector (GPIO 22).</description>
    <views>
-    <breadboardView><p layer="breadboard" svgId="connector2pin"/></breadboardView>
+    <breadboardView><p layer="breadboard" svgId="connector2pin" legId="connector2leg"/></breadboardView>
     <schematicView><p layer="schematic" svgId="connector2pin" terminalId="connector2terminal"/></schematicView>
     <pcbView><p layer="copper0" svgId="connector2pin"/><p layer="copper1" svgId="connector2pin"/></pcbView>
    </views>
@@ -79,7 +79,7 @@
   <connector id="connector3" name="SDA" type="male">
    <description>I2C data. On the board: any I2C connector (GPIO 21).</description>
    <views>
-    <breadboardView><p layer="breadboard" svgId="connector3pin"/></breadboardView>
+    <breadboardView><p layer="breadboard" svgId="connector3pin" legId="connector3leg"/></breadboardView>
     <schematicView><p layer="schematic" svgId="connector3pin" terminalId="connector3terminal"/></schematicView>
     <pcbView><p layer="copper0" svgId="connector3pin"/><p layer="copper1" svgId="connector3pin"/></pcbView>
    </views>

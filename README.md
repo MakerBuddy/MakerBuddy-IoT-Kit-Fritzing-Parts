@@ -8,31 +8,33 @@ into it, in two forms:
   for any other tool: Inkscape, Figma, draw.io, Cirkit Designer, slides, worksheets, a website.
 
 The kit has no loose wires: every sensor reaches the board through a cable with a plug. The parts
-work the same way. Each sensor comes **with its cable and plug**. Drop the plug on a socket of the
-board and all its pins connect at once.
+work the same way. Each sensor comes **with its cable**. Drop it with the cable's ends on a socket
+of the board and every wire connects at once. Then move the sensor wherever you like: the cable
+stretches and stays plugged in.
 
 ![The whole kit plugged into the board, as exported by Fritzing](docs/example-wiring.png)
 
-*The example sketch in `examples/`, opened and exported by Fritzing 1.0.2. Only the lamp is wired
-by hand, as in the real kit: its leads go to the relay's screw terminals.*
+*The example sketch in `examples/`, opened and exported by Fritzing 1.0.2. Fritzing paints the end
+of a connected lead green and a loose one red (the fan at the bottom is not plugged in). The only
+wire drawn by hand is 5 V to the relay's COM terminal.*
 
 ## The parts
 
-| | Part | Plug pins | Its socket on the board | File name |
+| | Part | Wires of its cable | Its socket on the board | File name |
 |---|---|---|---|---|
 | <img src="svg/breadboard/makerbuddy-iot-kit-v1-purple.svg" width="150" alt="Purple MakerBuddy IoT Kit V1.0 board"> | **MakerBuddy IoT Kit V1.0, purple** <br>ESP32 DevKit carrier, 76 × 72.3 mm | 81 pins | – | `makerbuddy-iot-kit-v1-purple` |
 | <img src="svg/breadboard/makerbuddy-iot-kit-v1-green.svg" width="150" alt="Green MakerBuddy IoT Kit V1.0 board"> | **MakerBuddy IoT Kit V1.0, green** <br>The same board in green soldermask | 81 pins | – | `makerbuddy-iot-kit-v1-green` |
-| <img src="svg/breadboard/ds18b20-probe.svg" width="60" alt="DS18B20 waterproof probe on its lead"> | **DS18B20** waterproof temperature probe, on its own lead | DQ, VCC, GND | **26** | `ds18b20-probe` |
-| <img src="svg/breadboard/dht11.svg" width="130" alt="DHT11 sensor with its cable"> | **DHT11** temperature and humidity sensor | DATA, VCC, GND | **25** | `dht11` |
-| <img src="svg/breadboard/mq2-gas-sensor.svg" width="130" alt="MQ-2 gas sensor with its cable"> | **MQ-2** gas and smoke sensor | AO, VCC, GND | **33** | `mq2-gas-sensor` |
-| <img src="svg/breadboard/soil-moisture-sensor.svg" width="70" alt="Capacitive soil moisture sensor with its cable"> | **Capacitive soil moisture sensor** v2.0 | AOUT, VCC, GND | **32** | `soil-moisture-sensor` |
+| <img src="svg/breadboard/ds18b20-probe.svg" width="50" alt="DS18B20 waterproof probe with its lead"> | **DS18B20** waterproof temperature probe, on its own lead | DQ, VCC, GND | **26** | `ds18b20-probe` |
+| <img src="svg/breadboard/dht11.svg" width="90" alt="DHT11 sensor with its cable"> | **DHT11** temperature and humidity sensor | DATA, VCC, GND | **25** | `dht11` |
+| <img src="svg/breadboard/mq2-gas-sensor.svg" width="100" alt="MQ-2 gas sensor with its cable"> | **MQ-2** gas and smoke sensor | AO, VCC, GND | **33** | `mq2-gas-sensor` |
+| <img src="svg/breadboard/soil-moisture-sensor.svg" width="60" alt="Capacitive soil moisture sensor with its cable"> | **Capacitive soil moisture sensor** v2.0 | AOUT, VCC, GND | **32** | `soil-moisture-sensor` |
 | <img src="svg/breadboard/relay-module.svg" width="150" alt="Relay module with its cable"> | **Relay module**, 5 V, 1 channel <br>plus screw terminals NO, COM, NC | IN, VCC, GND | **23** | `relay-module` |
-| <img src="svg/breadboard/sg90-servo.svg" width="80" alt="SG90 servo on its lead"> | **SG90** micro servo, on its own lead | PWM, VCC, GND | **19** | `sg90-servo` |
-| <img src="svg/breadboard/hc-sr501-pir.svg" width="110" alt="HC-SR501 PIR motion sensor with its cable"> | **HC-SR501** PIR motion sensor | OUT, VCC, GND | **18** | `hc-sr501-pir` |
-| <img src="svg/breadboard/hc-sr04.svg" width="150" alt="HC-SR04 ultrasonic sensor with its cable"> | **HC-SR04** ultrasonic distance sensor | VCC, GND, Echo, Trig | **HC-SR04** | `hc-sr04` |
+| <img src="svg/breadboard/sg90-servo.svg" width="90" alt="SG90 servo with its lead"> | **SG90** micro servo, on its own lead | PWM, VCC, GND | **19** | `sg90-servo` |
+| <img src="svg/breadboard/hc-sr501-pir.svg" width="90" alt="HC-SR501 PIR motion sensor with its cable"> | **HC-SR501** PIR motion sensor | OUT, VCC, GND | **18** | `hc-sr501-pir` |
+| <img src="svg/breadboard/hc-sr04.svg" width="120" alt="HC-SR04 ultrasonic sensor with its cable"> | **HC-SR04** ultrasonic distance sensor | VCC, GND, Echo, Trig | **HC-SR04** | `hc-sr04` |
 | <img src="svg/breadboard/lcd-1602-i2c.svg" width="150" alt="16 by 2 LCD with its cable"> | **LCD 16 × 2** with I2C backpack (0x27) | VCC, GND, SCL, SDA | **I2C** (the one with a socket) | `lcd-1602-i2c` |
-| <img src="svg/breadboard/dc-motor-fan.svg" width="130" alt="DC motor with yellow propeller"> | **DC motor with fan**, two bare leads | M+, M− | relay terminals + **5V** | `dc-motor-fan` |
-| <img src="svg/breadboard/lamp.svg" width="40" alt="Small lamp in a brass holder"> | **Lamp**, 6 V, two bare leads | L1, L2 | relay terminals + **5V** | `lamp` |
+| <img src="svg/breadboard/dc-motor-fan.svg" width="130" alt="DC motor with yellow propeller"> | **DC motor with fan**, two leads | M+, M− | relay terminal + **5V** | `dc-motor-fan` |
+| <img src="svg/breadboard/lamp.svg" width="40" alt="Small lamp in a brass holder"> | **Lamp**, 6 V, two leads | L1, L2 | relay terminal + **5V** | `lamp` |
 
 The purple and green boards are the same design in two soldermask colours. In Fritzing they are
 one family: place either one and switch the colour in the Inspector.
@@ -47,38 +49,48 @@ Get the parts:
 2. In Fritzing choose **File > Open** and pick the file (or drag it onto the Fritzing window).
 3. A parts bin called **MakerBuddy IoT Kit** appears in the Parts window.
 
-Build a circuit, in the Breadboard view:
+Plug a sensor in, in the Breadboard view. There are two ways:
 
-1. Drag the board from the bin onto the page.
-2. Drag a sensor from the bin and **drop its plug on the socket with its number**: the DHT11 on
-   `25`, the DS18B20 probe on `26`, and so on (the table above). All the plug's pins connect at
-   once. No wires to draw.
-3. Each part is drawn where it lies when it is in its own socket, so the whole kit fits around the
-   board without overlapping, as in the picture above.
+- **Drop the sensor on its socket.** Drag the sensor from the bin and let go when the ends of its
+  cable are on the socket with its number: the DHT11 on `25`, the probe on `26`, and so on (the
+  table above). All its wires connect at once. Each part is drawn so that it lies clear of the
+  others when it is dropped like this.
+- **Drag the cable to the board.** Put the sensor anywhere. Then drag the end of each wire onto
+  its pin of the socket, one wire at a time. The wires are in the socket's order.
+
+Then:
+
+- **Move a plugged-in sensor:** hold **Option** (Windows and Linux: **Alt**) and drag it. The
+  cable stays in the socket and stretches. Without the key, the cable comes out with the sensor.
+- **Bend a cable:** hold **Command** (Windows and Linux: **Ctrl**) and drag the middle of a wire.
+- **See what is connected:** the end of a connected wire is green, a loose one is red.
+- **It does not have to be exact.** Each socket pin accepts a wire end anywhere in its slice of
+  the socket.
+
+What Fritzing cannot do: move a three-wire plug as one piece. It moves a whole part, or one wire
+end. That is why a cable goes in either with its sensor, or wire by wire.
 
 Good to know:
 
-- **It does not have to be exact.** Each socket pin accepts a plug pin anywhere in its slice of
-  the socket. If the plug looks like it is in the socket, it is connected.
-- **Check it:** press and hold the mouse button on a pin of the plug. Fritzing highlights
-  everything that pin is connected to. Hold the mouse over any pin to read its name.
-- **A plug goes where you put it.** Fritzing cannot stop a DHT11 going into socket `23`. It
+- **A cable goes where you put it.** Fritzing cannot stop a DHT11 going into socket `23`. It
   connects there too, as in real life, and the firmware will not find it. Use the number.
-- **Other sockets:** to try a part on another edge of the board, turn it first (right-click >
-  Rotate). The 3-pin plugs all have the same order: signal, VCC, GND, with GND toward the edge.
-- **Lamp and fan** have bare leads, as in the kit. Draw wires: the `5V` socket's VCC to the relay's
-  `COM`, the relay's `NO` to one lead, the other lead to the `5V` socket's GND.
+- **Lamp and fan:** drag the end of one lead onto the relay's `NO` terminal and the other onto the
+  GND pin of the `5V` socket. Then draw one ordinary wire from the `5V` socket's VCC pin to the
+  relay's `COM` terminal.
 - To open one part only, open its `.fzpz` file from [`fritzing/parts/`](fritzing/parts). It lands
   in the **MINE** bin.
 - [`examples/MakerBuddy-IoT-Kit-wiring.fzz`](examples/MakerBuddy-IoT-Kit-wiring.fzz) shows the
   whole kit plugged in. It carries its own copy of the parts.
 
-### Modules without a cable
+### Other versions of the sensors
 
-[`fritzing/parts/module-only/`](fritzing/parts/module-only) has the seven modules on their own,
-with their JST socket as the pins, for wiring a module by hand with ordinary Fritzing wires. They
-are not in the bin, so the bin shows each sensor once. Their sockets take a plug the same way the
-board's do.
+Not in the bin, so the bin shows each sensor once:
+
+- [`fritzing/parts/fixed-cable/`](fritzing/parts/fixed-cable): each sensor with a drawn cable and
+  a drawn plug as one rigid piece. Dropping the plug on its socket connects it and it looks like
+  the real plug, but the sensor cannot be moved away from the socket.
+- [`fritzing/parts/module-only/`](fritzing/parts/module-only): the seven modules with no cable,
+  with their own JST socket as the pins, for wiring by hand with ordinary Fritzing wires.
 
 ## Use the drawings in other tools
 
@@ -134,15 +146,17 @@ and `I2C3` (top).
   soil sensor (98 × 23 mm), DHT11 body and SG90 body.
 - **Modules, scaled from photographs:** the green MakerBuddy JST adapters, the relay module and the
   PIR board. Expect them to be right to about a millimetre.
-- **Cables:** drawn short and in one fixed shape per part, so the kit fits on a page. The wire
-  colours are the kit's: blue, white, red for signal, VCC, GND on the 3-wire cable, and red, white,
-  blue, yellow on the 4-wire cable. The servo and the probe have their own leads and colours.
+- **Cables:** each wire is one straight line until you bend it. The wire colours are the kit's:
+  blue, white, red for signal, VCC, GND on the 3-wire cable, and red, white, blue, yellow on the
+  4-wire cable. White is drawn light grey so it shows on a white page. The servo and the probe
+  have their own leads and colours. The plug itself is not drawn on these parts (the fixed-cable
+  versions draw it).
 - **Shortened:** the DS18B20 lead (1 m on the real part) and the servo, motor and lamp leads.
-- **HC-SR04 and LCD:** their JST socket is on the back, so the cable is drawn going under them.
-  The plug's pins are in the board's order (VCC, GND, Echo, Trig and VCC, GND, SCL, SDA).
+- **HC-SR04 and LCD:** their JST socket is on the back, so the cable is drawn coming out from
+  under them. Its wires are in the board's order (VCC, GND, Echo, Trig and VCC, GND, SCL, SDA).
 - **Assumed:** the order of the four solder joints on the LCD's adapter tab (GND, VCC, SDA, SCL
   from the top, as on a standard PCF8574 backpack). The pin names are right either way.
-- **Footprints:** a part with a plug gets the footprint of the socket it plugs into (a pin
+- **Footprints:** a part with a cable gets the footprint of the socket it plugs into (a pin
   header, 2.54 mm spacing). The module-only parts show the module's outline and where its socket
   sits. Nobody has made a PCB from them yet: check them against your own part before ordering one.
 - The V1.0 board is the one drawn here. It is the board in the kit and in the photographs.
@@ -150,16 +164,18 @@ and `I2C3` (top).
 ## What was tested
 
 - `tools/build.py` checks every part before it writes anything: each pin is drawn exactly once in
-  the breadboard, schematic and PCB drawings, the schematic has a wire end point for every pin, the
-  layer names are the ones Fritzing looks for, and no drawing uses anything Fritzing cannot read.
-- Fritzing 1.0.2 on macOS opened the example sketch, in which nine plugs sit in their sockets with
-  no wires and the lamp is wired through the relay, and exported the breadboard, schematic and PCB
-  views with no errors. The picture at the top of this page is that export.
-- An earlier version of the parts bin was opened in Fritzing 1.0.2 and appeared in the Parts
-  window with all its parts.
-- **Not confirmed by hand yet:** dragging a part from the bin and dropping its plug on a socket.
-  It relies on what Fritzing does for every part with pins (a part pushed into a breadboard, a
-  shield on an Arduino): pins dropped on sockets connect.
+  the breadboard, schematic and PCB drawings, every lead has its line, the schematic has a wire end
+  point for every pin, the layer names are the ones Fritzing looks for, and no drawing uses
+  anything Fritzing cannot read.
+- Fritzing 1.0.2 on macOS opened the example sketch, in which the ends of nine cables and one lamp
+  lead sit on their pins with no wires drawn, and exported the breadboard, schematic and PCB views
+  with no errors. In that export Fritzing painted every one of those lead ends green (connected)
+  and the two loose fan leads red. The picture at the top of this page is that export.
+- The parts bin opens in Fritzing 1.0.2 and shows in the Parts window. With the fixed-cable
+  versions, dropping a plug on its socket by hand was tried and connects.
+- **Not confirmed by hand yet:** dropping a flexible part on its socket, dragging a single wire
+  end onto a pin, and Option-dragging a plugged-in part. These are Fritzing's own behaviours for
+  any part with bendable leads (its LEDs, motors and battery clips work the same way).
 - **Not tested:** older Fritzing versions, Windows and Linux, and PCB fabrication from the
   footprints. If something does not work, please
   [open an issue](https://github.com/MakerBuddy/MakerBuddy-IoT-Kit-Fritzing-Parts/issues).
@@ -170,6 +186,7 @@ and `I2C3` (top).
 |---|---|
 | `fritzing/MakerBuddy-IoT-Kit.fzbz` | The parts bin: the two boards and the 11 kit parts in one file |
 | `fritzing/parts/*.fzpz` | Each part on its own |
+| `fritzing/parts/fixed-cable/*.fzpz` | The nine sensors with a rigid drawn cable and plug |
 | `fritzing/parts/module-only/*.fzpz` | The seven modules without a cable |
 | `fritzing/fzp/*.fzp` | The part definitions as readable XML (already inside the files above) |
 | `svg/breadboard/`, `svg/schematic/`, `svg/pcb/` | The drawings as plain SVG |
@@ -181,8 +198,8 @@ and `I2C3` (top).
 ## Rebuilding
 
 Everything except this README is written by one script. `tools/board.py` draws the board,
-`tools/modules.py` the modules, and `tools/plugin.py` gives each one its cable and plug and decides
-where it lies beside the board. Change one, then:
+`tools/modules.py` the modules, and `tools/plugin.py` gives each one its cable and decides where
+it lies beside the board. Change one, then:
 
 ```bash
 pip install fonttools
@@ -201,7 +218,7 @@ here. Put these three files in `tools/fonts/` first:
 
 Or point `MB_FONT_MONO`, `MB_FONT_SANS` and `MB_FONT_BOLD` at any three font files.
 
-If you change a part that people may already have installed, raise the `r2` at the end of its
+If you change a part that people may already have installed, raise the number at the end of its
 module id (`board.py`, `modules.py`, `plugin.py`). Fritzing keeps parts by that id and will not replace an
 installed part with a different one of the same id.
 

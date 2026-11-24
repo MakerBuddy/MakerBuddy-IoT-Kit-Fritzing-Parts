@@ -45,7 +45,8 @@ def fzp(part: Part) -> str:
         out += [f'  <connector id="connector{i}" name={quoteattr(pin.name)} type="{pin.kind}">',
                 f"   <description>{escape(pin.desc)}</description>",
                 "   <views>",
-                f'    <breadboardView><p layer="breadboard" svgId="connector{i}pin"/></breadboardView>',
+                f'    <breadboardView><p layer="breadboard" svgId="connector{i}pin"'
+                + (f' legId="connector{i}leg"' if pin.leg else "") + "/></breadboardView>",
                 f'    <schematicView><p layer="schematic" svgId="connector{i}pin" terminalId="connector{i}terminal"/></schematicView>',
                 f'    <pcbView><p layer="copper0" svgId="connector{i}pin"/><p layer="copper1" svgId="connector{i}pin"/></pcbView>',
                 "   </views>",
@@ -117,6 +118,8 @@ def connector_centres(svg: str) -> dict[str, tuple[float, float]]:
                 found[ident] = (dx + a("cx"), dy + a("cy"))
             elif tag == "line":
                 found[ident] = (dx + (a("x1") + a("x2")) / 2, dy + (a("y1") + a("y2")) / 2)
+                if ident.endswith("leg"):          # a wire meets a lead at its free end
+                    found[ident[:-3] + "end"] = (dx + a("x2"), dy + a("y2"))
             else:
                 found[ident] = (dx, dy)
         for child in node:
@@ -158,7 +161,7 @@ class Sketch:
         raise KeyError(f"{item['part'].slug} has no pin {name}")
 
     def point(self, item: dict, i: int) -> tuple[float, float]:
-        cx, cy = item["centres"][f"connector{i}pin"]
+        cx, cy = item["centres"].get(f"connector{i}end") or item["centres"][f"connector{i}pin"]
         if item["turned"]:
             w, h = item["part"].bb_size
             cx, cy = w - cx, h - cy
