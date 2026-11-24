@@ -1,0 +1,6 @@
+.DS_Store
+__pycache__/
+*.pyc
+# fonts used to outline the lettering are not redistributed here (see README, "Rebuilding")
+tools/fonts/*.ttf
+tools/fonts/*.otf
